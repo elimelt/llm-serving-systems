@@ -1,0 +1,4 @@
+*.nsys-rep
+./cse599/*
+trace.json
+*.out
