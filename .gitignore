@@ -2,3 +2,5 @@
 ./cse599/*
 trace.json
 *.out
+*.ncu-rep
+*_demo/
