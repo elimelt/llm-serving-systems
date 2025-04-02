@@ -1,52 +1,64 @@
 #include <cuda_runtime.h>
 #include <stdio.h>
-//nvcc transpose_v1.cu -arch=compute_90 -code=sm_90
-//ncu --set full python torch_transpose.py
-__global__ void transpose(float *A, float *B, int num_row, int num_column) {
-    int row = blockIdx.x;
-    int col_start = threadIdx.x * blockDim.x;
-    int col_end = col_start + blockDim.x;
 
-    for (int col = col_start; col < col_end && col < num_column; col++) {
-        B[col * num_row + row] = A[row * num_column + col];
+__global__ void transposeKernel(float* input, float* output, int num_rows, int num_cols) {
+    int row = blockIdx.x;
+    int col_start = threadIdx.x * num_cols / blockDim.x;
+    int col_end = (threadIdx.x + 1) * num_cols / blockDim.x;
+
+    for (int col = col_start; col < col_end; col++) {
+        if (col < num_cols) {
+            output[col * num_rows + row] = input[row * num_cols + col];
+        }
     }
 }
 
 int main(){
-    int num_row = 8192;
-    int num_column = 8192;
-    float * host_A, * host_B;
-    float * device_A, * device_B;
+    int num_rows = 8192;
+    int num_cols = 8192;
 
-    host_A = (float *)malloc(num_row * num_column * sizeof(float));
-    host_B = (float *)malloc(num_row * num_column * sizeof(float));
-    cudaMalloc((void**)&device_A, num_row * num_column * sizeof(float));
-    cudaMalloc((void**)&device_B, num_row * num_column * sizeof(float));
+    float *h_input, *h_output;
+    float *d_input, *d_output;
 
-    // Initialize host_A with some values
-    for (int i = 0; i < num_row * num_column; i++) {
-        host_A[i] = static_cast<float>(i);
+    size_t size = num_rows * num_cols * sizeof(float);
+    h_input = (float*)malloc(size);
+    h_output = (float*)malloc(size);
+    cudaMalloc((void**)&d_input, size);
+    cudaMalloc((void**)&d_output, size);
+
+    // Initialize input matrix
+    for (int i = 0; i < num_rows; i++) {
+        for (int j = 0; j < num_cols; j++) {
+            h_input[i * num_cols + j] = static_cast<float>(i * num_cols + j);
+        }
     }
-    // Copy host_A to device_A
-    cudaMemcpy(device_A, host_A, num_row * num_column * sizeof(float), cudaMemcpyHostToDevice);
-    // Launch kernel to transpose matrix
-    dim3 grid(num_row);
-    dim3 block(128);
-    transpose<<<grid, block>>>(device_A, device_B, num_row, num_column);
-    // Copy transposed matrix back to host_B
-    cudaMemcpy(host_B, device_B, num_row * num_column * sizeof(float), cudaMemcpyDeviceToHost);
-    // Free device memory
-    cudaFree(device_A);
-    cudaFree(device_B);
 
-    // check the result
-    for (int i = 0; i < num_row; i++) {
-        for (int j = 0; j < num_column; j++) {
-            if (host_B[i * num_column + j] != host_A[j * num_row + i]) {
-                printf("Error at (%d, %d): %f != %f\n", i, j, host_B[i * num_column + j], host_A[j * num_row + i]);
-                return -1;
+    // Copy input matrix to device
+    cudaMemcpy(d_input, h_input, size, cudaMemcpyHostToDevice);
+
+    // Launch kernel
+    dim3 gridDim(num_rows);
+    dim3 blockDim(128);
+    transposeKernel<<<gridDim, blockDim>>>(d_input, d_output, num_rows, num_cols);
+    cudaDeviceSynchronize();
+
+    // Copy output matrix back to host
+    cudaMemcpy(h_output, d_output, size, cudaMemcpyDeviceToHost);
+    // Verify the result
+    for (int i = 0; i < num_rows; i++) {
+        for (int j = 0; j < num_cols; j++) {
+            if (h_output[j * num_rows + i] != h_input[i * num_cols + j]) {
+                printf("Mismatch at (%d, %d): %f != %f\n", i, j, h_output[j * num_rows + i], h_input[i * num_cols + j]);
+                break;
             }
         }
     }
-    printf("Transpose successful!\n");
+    printf("Transpose completed successfully.\n");
+    
+    // Free memory
+    free(h_input);
+    free(h_output);
+    cudaFree(d_input);
+    cudaFree(d_output);
+    return 0;
 }

@@ -2,7 +2,7 @@ import time
 import torch
 
 def multi_step(a, b):
-    return a * 2 + a * b + b * b
+    return a * 2 + a * b + b * b * b
 
 if __name__ == "__main__":
     

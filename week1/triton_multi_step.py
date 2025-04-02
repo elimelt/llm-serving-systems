@@ -23,7 +23,7 @@ def multi_step_kernel(x_ptr,  # *Pointer* to first input vector.
     # multiple of the block size.
     x = tl.load(x_ptr + offsets, mask=mask)
     y = tl.load(y_ptr + offsets, mask=mask)
-    output = x * 2 + x * y + y * y
+    output = x * 2 + x * y + y * y * y
     # Write x + y back to DRAM.
     tl.store(output_ptr + offsets, output, mask=mask)
 
