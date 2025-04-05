@@ -1,0 +1,9 @@
+*.nsys-rep
+./cse599/*
+.venv
+lecture_examples/*
+trace.json
+*.out
+*.ncu-rep
+*_demo/
+cuda_12.8.1_570.124.06_linux.run
