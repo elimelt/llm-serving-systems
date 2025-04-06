@@ -7,9 +7,9 @@
 constexpr int read_iter = ELEMENT_PER_BLOCK / THREADS_PER_BLOCK;
 
 __global__ void reductionKernel(int *d_input, int *d_output, int N) {
-    __shared__ int sdata[ELEMENT_PER_BLOCK];
+    __shared__ int sdata[THREADS_PER_BLOCK];
     int tid = threadIdx.x;
-    int i = blockIdx.x * blockDim.x * 2 + threadIdx.x;
+    int i = blockIdx.x * blockDim.x * read_iter + threadIdx.x;
     int local_sum = 0;
     for (int j = 0; j < read_iter; j++) {
         if (i < N) {
@@ -45,7 +45,7 @@ int main() {
 
     // Initialize input data
     for (int i = 0; i < N; i++) {
-        h_input[i] = i % 10; // Example data
+        h_input[i] = i % 11; // Example data
     }
     cudaMemcpy(d_input, h_input, N * sizeof(int), cudaMemcpyHostToDevice);
     // Launch kernel

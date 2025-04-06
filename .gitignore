@@ -4,3 +4,6 @@ trace.json
 *.out
 *.ncu-rep
 *_demo/
+*Demo/
+*demo*/
+*Answer*/

@@ -38,7 +38,7 @@ int main() {
 
     // Initialize input data
     for (int i = 0; i < N; i++) {
-        h_input[i] = i % 10; // Example data
+        h_input[i] = i % 11; // Example data
     }
     cudaMemcpy(d_input, h_input, N * sizeof(int), cudaMemcpyHostToDevice);
     // Launch kernel
