@@ -7,3 +7,9 @@ trace.json
 *Demo/
 *demo*/
 *Answer*/
+
+assignment*/cmake_install.cmake
+assignment*/CMakeFiles
+assignment*/CMakeCache.txt
+assignment*/_deps
+assignment*/Makefile
