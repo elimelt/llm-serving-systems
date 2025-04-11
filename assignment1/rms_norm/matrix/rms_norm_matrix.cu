@@ -38,7 +38,6 @@ __global__ void rms_norm_kernel(const float *input, const float *weight, float *
     for (int col = start_col; col < start_col + num_els && col < cols; col++) {
         output[row * cols + col] = input[row * cols + col] / rms * weight[row * cols + col];
     }
-    
 }
 
 void rms_norm_matrix(float *input, float *weight, float *output, int rows, int cols, float epsilon) {
@@ -54,8 +53,8 @@ void rms_norm_matrix(float *input, float *weight, float *output, int rows, int c
     cudaMemcpy(d_weight, weight, matrixSize, cudaMemcpyHostToDevice);
     
     // Launch kernel
-    dim3 grid(rows);
-    dim3 block(THREADS_PER_BLOCK);
+    dim3 grid(rows);  // num blocks; each block is responsible for a row
+    dim3 block(THREADS_PER_BLOCK); // num threads / block, num threads working on a single row
     rms_norm_kernel<<<grid, block>>>(d_input, d_weight, d_output, rows, cols, epsilon);
     
     // Wait for kernel completion and check for errors.
