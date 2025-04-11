@@ -48,19 +48,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/user10/code/CSE599K_SP25_Code/.venv/lib/python3.10/site-packages/cmake/data/bin/cmake
+CMAKE_COMMAND = /home/group2/code/CSE599K_SP25_Code/.venv/lib/python3.12/site-packages/cmake/data/bin/cmake
 
 # The command to remove a file.
-RM = /home/user10/code/CSE599K_SP25_Code/.venv/lib/python3.10/site-packages/cmake/data/bin/cmake -E rm -f
+RM = /home/group2/code/CSE599K_SP25_Code/.venv/lib/python3.12/site-packages/cmake/data/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/user10/code/CSE599K_SP25_Code/assignment1/rms_norm/vector
+CMAKE_SOURCE_DIR = /home/group2/code/CSE599K_SP25_Code/assignment1/rms_norm/vector
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/user10/code/CSE599K_SP25_Code/assignment1/rms_norm/vector
+CMAKE_BINARY_DIR = /home/group2/code/CSE599K_SP25_Code/assignment1/rms_norm/vector
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -68,7 +68,7 @@ CMAKE_BINARY_DIR = /home/user10/code/CSE599K_SP25_Code/assignment1/rms_norm/vect
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "No interactive CMake dialog available..."
-	/home/user10/code/CSE599K_SP25_Code/.venv/lib/python3.10/site-packages/cmake/data/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/home/group2/code/CSE599K_SP25_Code/.venv/lib/python3.12/site-packages/cmake/data/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -78,7 +78,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake to regenerate build system..."
-	/home/user10/code/CSE599K_SP25_Code/.venv/lib/python3.10/site-packages/cmake/data/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/home/group2/code/CSE599K_SP25_Code/.venv/lib/python3.12/site-packages/cmake/data/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user10/code/CSE599K_SP25_Code/assignment1/rms_norm/vector/CMakeFiles /home/user10/code/CSE599K_SP25_Code/assignment1/rms_norm/vector//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/group2/code/CSE599K_SP25_Code/assignment1/rms_norm/vector/CMakeFiles /home/group2/code/CSE599K_SP25_Code/assignment1/rms_norm/vector//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/user10/code/CSE599K_SP25_Code/assignment1/rms_norm/vector/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/group2/code/CSE599K_SP25_Code/assignment1/rms_norm/vector/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
