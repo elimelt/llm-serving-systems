@@ -1,8 +1,14 @@
 import torch.nn as nn
 import torch
 
-x = torch.tensor([[1, 2, 3, 4], [5, 6, 7, 8]], dtype=torch.float32).T
+def create_tensor(rows, cols):
+    x = torch.zeros((rows, cols), dtype=torch.float32)
+    for i in range(rows):
+        for j in range(cols):
+            x[i][j] = i * cols + j + 1
+    return x
+x = create_tensor(5, 5).T
 print(x)
 # rms norm of x
-rms_norm = nn.RMSNorm(2)
+rms_norm = nn.RMSNorm(5)
 print(rms_norm(x))

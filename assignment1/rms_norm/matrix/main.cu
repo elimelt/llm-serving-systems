@@ -2,8 +2,8 @@
 #include "rms_norm_matrix.h"
 #include <stdio.h>
 
-#define ROWS 4
-#define COLS 2
+#define ROWS 8192
+#define COLS 8192
 #define SIZE (ROWS * COLS)
 
 int main() {
@@ -19,9 +19,9 @@ int main() {
 
     rms_norm_matrix(input, weight, output, ROWS, COLS, 0.000001f);
 
-    for (int i = 0; i < SIZE; i++) {
-        printf("output[%d] = %f\n", i, output[i]);
-    }
+    // for (int i = 0; i < SIZE; i++) {
+    //     printf("output[%d] = %f\n", i, output[i]);
+    // }
 
     delete[] input;
     delete[] weight;
