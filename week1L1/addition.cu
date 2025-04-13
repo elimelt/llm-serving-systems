@@ -40,7 +40,15 @@ int main() {
 
     dim3 num_block((num + BLOCKSIZE - 1) / BLOCKSIZE);
     dim3 num_threads(BLOCKSIZE);
+    /*
+    The below code corresponds to the cudaLaunchKernel signature
 
+    __host__​cudaError_t cudaLaunchKernel ( const void* func, dim3 gridDim, dim3 blockDim, void** args, size_t sharedMem, cudaStream_t stream )
+
+    num_block corresponds to gridDim: how many blocks you want to launch.
+    num_threads corresponds to blockDim: how many threads per block you want.
+
+    */
     add<<<num_block, num_threads>>>(d_a, d_b, d_c, num);
 
     cudaDeviceSynchronize();
