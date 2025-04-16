@@ -2,8 +2,8 @@
 #include "silu.h"
 #include <iostream>
 
-// #define SIZE (8192 * 8192)
-#define SIZE (8192 * 8192 * 4) // 4 bytes per float
+#define SIZE (8192 * 8192)
+// #define SIZE (8192 * 8192 * 4) // 4 bytes per float
 
 int main() {
     float* input = new float[SIZE];
