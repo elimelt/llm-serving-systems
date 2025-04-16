@@ -4,7 +4,9 @@
         "*.v": "systemverilog",
         "numbers": "cpp",
         "cmath": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "new": "cpp",
+        "iomanip": "cpp"
     },
     "cmake.ignoreCMakeListsMissing": true
 }

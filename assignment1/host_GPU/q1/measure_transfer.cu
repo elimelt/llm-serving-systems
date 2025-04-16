@@ -11,14 +11,8 @@ int main() {
     const int iterations = 100;
 
     // Loop over data sizes: 2^0 to 2^10 bytes
-    for (int exp = 0; exp <= 10; ++exp) {
+    for (int exp = 0; exp <= 26; ++exp) {
         size_t size = 1 << exp;  // Data size in bytes
-
-        // Allocate pageable host memory (using new)
-        char* h_pageable = new char[size];
-        for (size_t i = 0; i < size; ++i) {
-            h_pageable[i] = static_cast<char>(i % 256);
-        }
 
         // Allocate pinned host memory (using cudaMallocHost)
         char* h_pinned = nullptr;
@@ -42,22 +36,6 @@ int main() {
 
         // Run 10 iterations per transfer size
         for (int iter = 0; iter < iterations; ++iter) {
-            // Pageable Host-to-Device
-            cudaEventRecord(start);
-            cudaMemcpy(d_data, h_pageable, size, cudaMemcpyHostToDevice);
-            cudaEventRecord(stop);
-            cudaEventSynchronize(stop);
-            cudaEventElapsedTime(&t, start, stop);
-            total_pageable_htod += t;
-
-            // Pageable Device-to-Host
-            cudaEventRecord(start);
-            cudaMemcpy(h_pageable, d_data, size, cudaMemcpyDeviceToHost);
-            cudaEventRecord(stop);
-            cudaEventSynchronize(stop);
-            cudaEventElapsedTime(&t, start, stop);
-            total_pageable_dtoh += t;
-
             // Pinned Host-to-Device
             cudaEventRecord(start);
             cudaMemcpy(d_data, h_pinned, size, cudaMemcpyHostToDevice);
@@ -75,11 +53,41 @@ int main() {
             total_pinned_dtoh += t;
         }
 
+        cudaFreeHost(h_pinned);
+
+        // Allocate pageable host memory (using new)
+        char* h_pageable = new char[size];
+        for (size_t i = 0; i < size; ++i) {
+            h_pageable[i] = static_cast<char>(i % 256);
+        }
+        
+
+        // Average times (in milliseconds)
+        double avg_pinned_htod   = total_pinned_htod / iterations;
+        double avg_pinned_dtoh   = total_pinned_dtoh / iterations;
+
+        // Run 10 iterations per transfer size
+        for (int iter = 0; iter < iterations; ++iter) {
+                       // Pageable Host-to-Device
+            cudaEventRecord(start);
+            cudaMemcpy(d_data, h_pageable, size, cudaMemcpyHostToDevice);
+            cudaEventRecord(stop);
+            cudaEventSynchronize(stop);
+            cudaEventElapsedTime(&t, start, stop);
+            total_pageable_htod += t;
+
+            // Pageable Device-to-Host
+            cudaEventRecord(start);
+            cudaMemcpy(h_pageable, d_data, size, cudaMemcpyDeviceToHost);
+            cudaEventRecord(stop);
+            cudaEventSynchronize(stop);
+            cudaEventElapsedTime(&t, start, stop);
+            total_pageable_dtoh += t;
+        }
+
         // Average times (in milliseconds)
         double avg_pageable_htod = total_pageable_htod / iterations;
         double avg_pageable_dtoh = total_pageable_dtoh / iterations;
-        double avg_pinned_htod   = total_pinned_htod / iterations;
-        double avg_pinned_dtoh   = total_pinned_dtoh / iterations;
 
         // Calculate bandwidth in MB/s
         double pageable_htod_bandwidth = (size / (avg_pageable_htod * 1e-3)) / (1024.0 * 1024.0);
@@ -99,7 +107,6 @@ int main() {
         cudaEventDestroy(stop);
         cudaFree(d_data);
         delete[] h_pageable;
-        cudaFreeHost(h_pinned);
     }
 
     outfile.close();
