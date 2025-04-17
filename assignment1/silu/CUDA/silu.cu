@@ -16,31 +16,13 @@ __global__ void silu_kernel(float *x, float *o, int n) {
     }
 }
 
-// input and output are allocated on host device. need to be
-// copied
 void silu(float *input, float *output, int n) {
-    // Allocate memory on the device
-    float *d_input, *d_output;
-    cudaMalloc((void**)&d_input, n * sizeof(float));
-    cudaMalloc((void**)&d_output, n * sizeof(float));
-
-    // Copy data from host to device
-    cudaMemcpy(d_input, input, n * sizeof(float), cudaMemcpyHostToDevice);
-
     dim3 num_block((n + BLOCKSIZE - 1) / BLOCKSIZE);
     dim3 num_threads(BLOCKSIZE);
-    silu_kernel<<<num_block, num_threads>>>(d_input, d_output, n);
+    silu_kernel<<<num_block, num_threads>>>(input, output, n);
 
-    cudaDeviceSynchronize();
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess) {
         std::cerr << "CUDA error: " << cudaGetErrorString(err) << std::endl;
     }
-    
-    // Copy result back to host
-    cudaMemcpy(output, d_output, n * sizeof(float), cudaMemcpyDeviceToHost);
-
-    // Free device memory
-    cudaFree(d_input);
-    cudaFree(d_output);
 }

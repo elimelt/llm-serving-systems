@@ -5,26 +5,51 @@
 #define ROWS 8192
 #define COLS 8192
 #define SIZE (ROWS * COLS)
+#define ITERS 10
 
 int main() {
-    float* input = new float[SIZE];
-    float* weight = new float[SIZE];
-    float* output = new float[SIZE];
-    // Check the result
-
+    float* h_input = new float[SIZE];
+    float* h_weight = new float[SIZE];
     for (int i = 0; i < SIZE; i++) {
-        input[i] = static_cast<float>(i + 1);
-        weight[i] = 1.0f;
+        h_input[i] = static_cast<float>(i + 1);
+        h_weight[i] = 1.0f;
     }
 
-    rms_norm_matrix(input, weight, output, ROWS, COLS, 0.000001f);
+    size_t matrixSize = ROWS * COLS * sizeof(float);
+    float *d_input, *d_weight, *d_output;
+    cudaMalloc((void**)&d_input, matrixSize);
+    cudaMalloc((void**)&d_weight, matrixSize);
+    cudaMalloc((void**)&d_output, matrixSize);
 
-    // for (int i = 0; i < SIZE; i++) {
-    //     printf("output[%d] = %f\n", i, output[i]);
-    // }
+    cudaMemcpy(d_input, h_input, matrixSize, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_weight, h_weight, matrixSize, cudaMemcpyHostToDevice);
 
-    delete[] input;
-    delete[] weight;
-    delete[] output;
+    cudaEvent_t start, stop;
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    float totalTime = 0;
+
+    for (int iter = 0; iter < ITERS; iter++) {
+        cudaEventRecord(start);
+        rms_norm_matrix(d_input, d_weight, d_output, ROWS, COLS, 0.000001f);
+        cudaEventRecord(stop);
+
+        cudaEventSynchronize(stop);
+        float milliseconds = 0;
+        cudaEventElapsedTime(&milliseconds, start, stop);
+        totalTime += milliseconds;
+        cudaDeviceSynchronize();
+    }
+
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
+
+    printf("Average time per iteration: %f ms\n", totalTime / ITERS);
+
+    cudaFree(d_input);
+    cudaFree(d_weight);
+    cudaFree(d_output);
+    delete[] h_input;
+    delete[] h_weight;
     return 0;
 }

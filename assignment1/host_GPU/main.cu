@@ -6,7 +6,7 @@
 #define ROWS 8192 
 #define COLS 65536
 #define SIZE (ROWS * COLS)
-#define NITERATIONS 10000
+#define NITERATIONS 10
 int main() {
     float total_time = 0.0f;
     float *output, *input;

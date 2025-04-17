@@ -25,36 +25,14 @@ __global__ void rms_norm_vector_kernel(float *input, float *weight, float *outpu
 }
 
 void rms_norm_vector(float *input, float *weight, float *output, int cols, float epsilon) {
-    // Allocate device memory
-    size_t vectorSize = cols * sizeof(float);
-    float *d_input, *d_weight, *d_output;
-    cudaMalloc((void**)&d_input, vectorSize);
-    cudaMalloc((void**)&d_weight, vectorSize);
-    cudaMalloc((void**)&d_output, vectorSize);
-    
-    // Copy data from host to device
-    cudaMemcpy(d_input, input, vectorSize, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_weight, weight, vectorSize, cudaMemcpyHostToDevice);
-    
     // Launch kernel
     dim3 grid((cols + ELEMENT_PER_BLOCK - 1) / ELEMENT_PER_BLOCK);
     dim3 block(ELEMENT_PER_BLOCK);
-    rms_norm_vector_kernel<<<grid, block>>>(d_input, d_weight, d_output, cols, epsilon);
-    
-    // Wait for kernel completion and check for errors.
-    cudaDeviceSynchronize();
-    
+    rms_norm_vector_kernel<<<grid, block>>>(input, weight, output, cols, epsilon);
+
     // Check for errors in kernel launch
     cudaError_t err = cudaGetLastError();
     if (err != cudaSuccess) {
         std::cerr << "CUDA error: " << cudaGetErrorString(err) << std::endl;
     }
-    
-    // Copy the result back to host
-    cudaMemcpy(output, d_output, vectorSize, cudaMemcpyDeviceToHost);
-    
-    // Free device memory
-    cudaFree(d_input);
-    cudaFree(d_weight);
-    cudaFree(d_output);
 }

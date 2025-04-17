@@ -6,7 +6,8 @@
         "cmath": "cpp",
         "iostream": "cpp",
         "new": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "chrono": "cpp"
     },
     "cmake.ignoreCMakeListsMissing": true
 }
