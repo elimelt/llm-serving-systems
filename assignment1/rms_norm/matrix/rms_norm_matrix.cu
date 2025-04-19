@@ -15,6 +15,7 @@ __global__ void rms_norm_kernel(const float *input, const float *weight, float *
     sdata[threadIdx.x] = 0;
 
     // Each thread computes partial sum of squares (coalesced)
+    // Note: ROWS * COLS reads from global memory
     for (int col = threadIdx.x; col < cols; col += blockDim.x)
     {
         sdata[threadIdx.x] += input[row * cols + col] * input[row * cols + col];
@@ -36,6 +37,8 @@ __global__ void rms_norm_kernel(const float *input, const float *weight, float *
     float rms = sqrtf(sdata[0] / cols + epsilon);
 
     // Normalize the row (coalesced)
+    // Note: ROWS * COLS writes to global memory
+    // Note: ROWS * COLS + COLS reads from global memory
     for (int col = threadIdx.x; col < cols; col += blockDim.x)
     {
         output[row * cols + col] = input[row * cols + col] / rms * weight[col];
