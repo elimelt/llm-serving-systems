@@ -6,23 +6,23 @@
 #define ROWS 8192 
 #define COLS 65536
 #define SIZE (ROWS * COLS)
-#define NITERATIONS 10
+#define NITERATIONS 10000
 int main() {
     float total_time = 0.0f;
     float *output, *input;
 
-    // Allocate pinned memory for input with default flags
-    cudaError_t err = cudaHostAlloc((void**)&input, SIZE * sizeof(float), cudaHostAllocDefault);
-    if (err != cudaSuccess) {
-        std::cerr << "Error allocating pinned host memory: " << cudaGetErrorString(err) << std::endl;
+    // Allocate host memory for input
+    input = new float[SIZE];
+    if (input == nullptr) {
+        std::cerr << "Error allocating pinned host memory" << std::endl;
         return 1;
     }
      
     // Allocate device memory for output
-    err = cudaMalloc((void**)&output, ROWS * sizeof(float));
+    cudaError_t err = cudaMalloc((void**)&output, ROWS * sizeof(float));
     if (err != cudaSuccess) {
         std::cerr << "Error allocating device memory: " << cudaGetErrorString(err) << std::endl;
-        cudaFreeHost(input);
+        delete[] input;
         return 1;
     }
     // Initialize input data
@@ -78,7 +78,7 @@ int main() {
         cudaEventDestroy(start);
         cudaEventDestroy(stop);
     }
-    cudaFreeHost(input);
+    delete[] input;
     cudaFree(output);
     std::cout << "Average execution time: " << total_time / NITERATIONS * 1000.0f << " microseconds" << std::endl;
     return 0;
