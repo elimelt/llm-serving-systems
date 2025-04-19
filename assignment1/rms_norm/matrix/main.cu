@@ -5,24 +5,25 @@
 #define ROWS 8192
 #define COLS 8192
 #define SIZE (ROWS * COLS)
-#define ITERS 100
+#define ITERS 10
 
 int main() {
     float* h_input = new float[SIZE];
-    float* h_weight = new float[SIZE];
+    float* h_weight = new float[COLS];
     for (int i = 0; i < SIZE; i++) {
         h_input[i] = static_cast<float>(i + 1);
-        h_weight[i] = 1.0f;
+        if (i < COLS) h_weight[i] = 1.0f;
     }
 
     size_t matrixSize = ROWS * COLS * sizeof(float);
+    size_t weightSize = COLS * sizeof(float);
     float *d_input, *d_weight, *d_output;
     cudaMalloc((void**)&d_input, matrixSize);
-    cudaMalloc((void**)&d_weight, matrixSize);
+    cudaMalloc((void**)&d_weight, weightSize);
     cudaMalloc((void**)&d_output, matrixSize);
 
     cudaMemcpy(d_input, h_input, matrixSize, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_weight, h_weight, matrixSize, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_weight, h_weight, weightSize, cudaMemcpyHostToDevice);
 
     cudaEvent_t start, stop;
     cudaEventCreate(&start);
