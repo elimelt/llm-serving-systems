@@ -9,15 +9,13 @@ __global__ void rms_norm_kernel(const float *input, const float *weight, float *
 {
     // Each block works on one row.
     int row = blockIdx.x;
-    int num_els = (cols + THREADS_PER_BLOCK - 1) / THREADS_PER_BLOCK;
-    int start_col = threadIdx.x * num_els;
 
     // Shared memory for partial sums.
     __shared__ float sdata[THREADS_PER_BLOCK];
     sdata[threadIdx.x] = 0;
 
-    // Each thread computes a partial sum of squares for its assigned elements.
-    for (int col = start_col; col < start_col + num_els && col < cols; col++)
+    // Each thread computes partial sum of squares (coalesced)
+    for (int col = threadIdx.x; col < cols; col += blockDim.x)
     {
         sdata[threadIdx.x] += input[row * cols + col] * input[row * cols + col];
     }
@@ -37,10 +35,10 @@ __global__ void rms_norm_kernel(const float *input, const float *weight, float *
     // Compute the RMS value.
     float rms = sqrtf(sdata[0] / cols + epsilon);
 
-    // Normalize the row
-    for (int col = start_col; col < start_col + num_els && col < cols; col++)
+    // Normalize the row (coalesced)
+    for (int col = threadIdx.x; col < cols; col += blockDim.x)
     {
-        output[row * cols + col] = input[row * cols + col] / rms * weight[row * cols + col];
+        output[row * cols + col] = input[row * cols + col] / rms * weight[col];
     }
 }
 
