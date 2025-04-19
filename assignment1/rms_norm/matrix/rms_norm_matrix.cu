@@ -18,7 +18,7 @@ __global__ void rms_norm_kernel(const float *input, const float *weight, float *
 
     // Each thread computes a partial sum of squares for its assigned elements.
     for (int col = start_col; col < start_col + num_els && col < cols; col++) {
-        sdata[threadIdx.x] += input[row * cols + col] * input[row * cols + col];
+      sdata[threadIdx.x] += input[row * cols + col] * input[row * cols + col];
     }
     __syncthreads();
     

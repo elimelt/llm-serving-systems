@@ -5,7 +5,7 @@
 #define ROWS 8192
 #define COLS 8192
 #define SIZE (ROWS * COLS)
-#define ITERS 10
+#define ITERS 100
 
 int main() {
     float* h_input = new float[SIZE];
