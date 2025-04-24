@@ -1,74 +1,65 @@
-
 import time
+import pandas as pd
 import matplotlib.pyplot as plt
 from no_kv import Engine as NoKVEngine
 from single_batch import Engine as KVEngine
 
+def get_input_str(length):
+    """
+    Generate a string of the specified length.
+    """
+    try:
+        return open("input.txt", "r").read()[:length]
+    except FileNotFoundError:
+        return ''
+    
+def run_engine(engine, input_str, rounds=1):
+    """
+    Run the specified engine with the given input string.
+    """
+    output, t = engine.generate(input_str, rounds=rounds)
+    return t, output
 
-def main():
-    input_len = 1024
-    output_lens = list( range( 128, 2048 + 1, 128 ) )
-    output_lens = list( range( 128, 1024, 128 ) )
-    print(output_lens)
+
+if __name__ == '__main__':
+    kv_model = KVEngine()
+    no_kv_model = NoKVEngine()
     
-    # input_str = get_input_str( input_len, print_text=False )
-    input_str = "The university of washington"
-    no_kv_engine = NoKVEngine()
-    kv_engine = KVEngine()
-    
-    # print(f"measuring no-kv ")
-    # time_nokv = measure( no_kv_engine, input_str, output_lens )
-    # print(f"time: {str( time_nokv )}")
+    SIZES = range(128, 2048, 128)
+    res_kv = []
+    res_no_kv = []
+    in_str = get_input_str(1028)
+    for sz in SIZES:
+        print(f"input size: {sz}")
         
-    print(f"measuring kv ")
-    time_kv = measure( kv_engine, input_str, output_lens )
-    print(f"time: {str( time_kv )}")
-    
-    
-
-def measure( engine, input_str, output_lens ):
-    input_ids = engine.tokenizer.encode(input_str)
-    tmp = len(input_ids)
-    print(f"input id len: {tmp}")
-    times = []
-    for length in output_lens:
-        total_query_time = 0
-        output_ids = input_ids.copy()
-        start = time.perf_counter()
-        new_token = engine.run( output_ids, prefill=True )
-        stop = time.perf_counter()
-        output_ids.append( new_token )
+        t, output = run_engine(kv_model, in_str, rounds=sz)
+        print(f"KVEngine: {t:.4f} seconds for size {sz} with kv")
+        res_kv.append((t, output))
+        t, output = run_engine(no_kv_model, in_str, rounds=sz)
+        print(f"NoKVEngine: {t:.4f} seconds for size {sz} with no kv")
+        res_no_kv.append((t, output))
         
-        total_query_time += ( stop - start )
-        for round in range( length ):
-            start = time.perf_counter()
-            new_token = engine.run( output_ids, prefill=False )
-            stop = time.perf_counter()
-            output_ids.append( new_token )
-            
-            total_query_time += ( stop - start )
-        print( total_query_time )
-        times.append( total_query_time )
-        output_text = engine.tokenizer.decode( output_ids, skip_special_tokens=True)
-        print( output_text )
-             
-    return times
-
-
-
-def get_input_str( input_len, print_text=False ):
-    input_str_filepath = 'input.txt'
-    with open( input_str_filepath, 'r', encoding='utf-8') as f:
-        str = f.read().split()
-    input_str = str[ :input_len - 206 ]
-    
-    text = ' '.join(input_str)
-
-    if print_text:
-        print( text )
         
-    return text
+    df_kv = pd.DataFrame(res_kv, columns=['Time', 'Output'])
+    df_no_kv = pd.DataFrame(res_no_kv, columns=['Time', 'Output'])
     
+    df_kv.to_csv('kv_engine_results.csv', index=False)
+    df_no_kv.to_csv('no_kv_engine_results.csv', index=False)
+    
+    print("last output:", output)
+    
+    # Plotting the results
+    times_kv = [r[0] for r in res_kv]
+    times_no_kv = [r[0] for r in res_no_kv]
+    plt.plot(SIZES, times_kv, label='KVEngine')
+    plt.plot(SIZES, times_no_kv, label='NoKVEngine')
+    
+    plt.xlabel('Input Size')
+    plt.ylabel('Time (seconds)')
+    plt.title('KVEngine Performance')
+    plt.savefig('kv_engine_performance.png')
 
-if __name__ == "__main__":
-    main()
+    
+        
+    
+    

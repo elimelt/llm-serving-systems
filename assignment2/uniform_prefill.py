@@ -20,7 +20,7 @@ class Engine:
         self.layers = 32            # Number of transformer layers
 
         # Load the tokenizer for text processing
-        self.tokenizer = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B-Instruct")
+        self.tokenizer = AutoTokenizer.from_pretrained("/model/Meta-Llama-3-8B-Instruct")
 
         # Initialize and load model weights using the helper module
         weight_manager = WeightManager()
@@ -37,9 +37,9 @@ class Engine:
         ########################################
         pass
     
-    def generate_batched(self, input_string, rounds=20):
-        input_ids_list = self.tokenizer(input_string, return_tensors="pt", padding=False).input_ids
-        print("Input String:", input_string)
+    def generate_batched(self, input_string_list, rounds=20):
+        input_ids_list = self.tokenizer(input_string_list, return_tensors="pt", padding=False).input_ids
+        print("Input String:", input_string_list)
 
         print("Token IDs:", input_ids_list)
         output_ids_list = input_ids_list  

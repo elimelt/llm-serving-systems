@@ -2,6 +2,7 @@ import torch
 from transformers import AutoTokenizer
 import sys
 from helper import WeightManager, apply_rope, extract_model_weights
+import time
 
 
 class Engine:
@@ -19,7 +20,7 @@ class Engine:
         self.layers = 32            # Number of transformer layers
 
         # Load the tokenizer for text processing
-        self.tokenizer = AutoTokenizer.from_pretrained("meta-llama/Meta-Llama-3-8B-Instruct")
+        self.tokenizer = AutoTokenizer.from_pretrained("/model/Meta-Llama-3-8B-Instruct")
 
         # Initialize and load model weights using the helper module
         weight_manager = WeightManager()
@@ -102,19 +103,25 @@ class Engine:
     def generate(self, input_string, rounds=20):
         input_ids = self.tokenizer.encode(input_string)
 
-        print("Token IDs:", input_ids)
+        # print("Token IDs:", input_ids)
         output_ids = input_ids.copy()
-
+        time_taken = 0
+        start = time.perf_counter()
         new_token = self.run(output_ids)
+        stop = time.perf_counter()
+        time_taken += ( stop - start )
         output_ids.append(new_token)
 
         for round in range(rounds - 1):
-            print(f"Round {round}")
+            # print(f"Round {round}")
+            start = time.perf_counter()
             new_token = self.run(output_ids, prefill=True)
+            stop = time.perf_counter()
+            time_taken += ( stop - start )
             output_ids.append(new_token)
 
         output_text = self.tokenizer.decode(output_ids, skip_special_tokens=True)
-        return output_text
+        return output_text, time_taken
 
 ########################################
 # Main Loop: Text Generation
@@ -122,5 +129,5 @@ class Engine:
 if __name__ == "__main__":
     input_string = "Hi, who are you?"
     engine = Engine()
-    output_text = engine.generate(input_string, rounds=20)
-    print("Generated Text:", output_text)
+    output_text, t = engine.generate(input_string, rounds=20)
+    print(f"Generated Text: {output_text}, time: {t}s")
