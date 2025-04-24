@@ -35,7 +35,97 @@ class Engine:
         ########################################
         # Complete this function
         ########################################
-        pass
+        # if prefill:
+        #     self.kv_cache = {}
+
+        # embed & first-layer hidden state
+        input_tensor = torch.tensor(input_ids, dtype=torch.int32, device='cuda')
+        hidden_state = self.weights["embedding"][input_tensor]
+
+        for current_layer in range(self.layers):
+            # --- Self‐Attention Block ---
+            # RMSNorm
+            rms = torch.sqrt(torch.mean(hidden_state ** 2, dim=-1, keepdim=True) + 1e-5)
+            normalized_x = hidden_state / rms
+            x = normalized_x.to(torch.float16) * self.weights["layernormAttn_weight"][current_layer]
+
+            # project to Q/K/V
+            k = x.matmul(self.weights["self_attn_k_proj_weight"][current_layer].t())
+            v = x.matmul(self.weights["self_attn_v_proj_weight"][current_layer].t())
+            q = x.matmul(self.weights["self_attn_q_proj_weight"][current_layer].t())
+
+            # RoPE rotations
+            apply_rope(q, output=q, head_dim=self.head_dim, offset=0)
+            apply_rope(k, output=k, head_dim=self.head_dim, offset=0)
+
+            # reshape into (seq_len, num_kv_heads, head_dim)
+            sub_k = k.view(-1, self.num_kv_heads, self.head_dim)
+            sub_v = v.view(-1, self.num_kv_heads, self.head_dim)
+
+            # update our cache
+            if prefill or (current_layer not in self.kv_cache):
+                # first time through: store all K/V
+                self.kv_cache[current_layer] = {"k": sub_k, "v": sub_v}
+            else:
+                # on later tokens: append only the new row
+                cache = self.kv_cache[current_layer]
+                cache["k"] = torch.cat([cache["k"], sub_k], dim=0)
+                cache["v"] = torch.cat([cache["v"], sub_v], dim=0)
+
+            # pull the full K/V for attention
+            cache_k = self.kv_cache[current_layer]["k"]
+            cache_v = self.kv_cache[current_layer]["v"]
+
+            # now do the usual repeat_interleave to match Q heads
+            scale = 1.0 / (self.head_dim ** 0.5)
+            group_size = self.num_qo_heads // self.num_kv_heads
+
+            # Q is only as long as input_ids (often 1 on incremental)
+            sub_q = q.view(-1, self.num_qo_heads, self.head_dim)
+            # full KV from cache
+            sub_k = cache_k.repeat_interleave(group_size, dim=1)  # (seq_k, num_qo_heads, head_dim)
+            sub_v = cache_v.repeat_interleave(group_size, dim=1)
+
+            # transpose for batched matmuls
+            sub_q_t = sub_q.permute(1, 0, 2)  # (num_qo_heads, seq_q, head_dim)
+            sub_k_t = sub_k.permute(1, 0, 2)  # (num_qo_heads, seq_k, head_dim)
+
+            # attention scores & causal mask
+            scores = torch.matmul(sub_q_t, sub_k_t.transpose(-2, -1)) * scale
+            n_q, n_k = sub_q.shape[0], cache_k.shape[0]
+            causal_mask = torch.tril(torch.ones(n_q, n_k, dtype=torch.bool, device=scores.device))
+            scores = scores.masked_fill(~causal_mask.unsqueeze(0), float("-inf"))
+
+            # softmax & weighted sum
+            attn_weights = torch.softmax(scores, dim=-1)
+            v_t = sub_v.permute(1, 0, 2)
+            attn_output = torch.matmul(attn_weights, v_t).permute(1, 0, 2)
+            attn_output = attn_output.reshape(-1, self.num_qo_heads * self.head_dim)
+
+            # projection + residual
+            prefill_output = attn_output.matmul(self.weights["o_proj_weight"][current_layer].t()) + hidden_state
+
+            # --- FFN Block ---
+            rms = torch.sqrt(torch.mean(prefill_output ** 2, dim=-1, keepdim=True) + 1e-5)
+            normalized_x = prefill_output / rms
+            layernormFFN_output = normalized_x.to(torch.float16) * self.weights["layernormFFN_weight"][current_layer]
+
+            up = layernormFFN_output.matmul(self.weights["up_proj_weight"][current_layer].t())
+            gate = layernormFFN_output.matmul(self.weights["gate_proj_weight"][current_layer].t())
+            activation = up * torch.nn.functional.silu(gate)
+            hidden_state = activation.matmul(self.weights["down_proj_weight"][current_layer].t()) + prefill_output
+
+        # --- Final Norm & LM Head ---
+        rms = torch.sqrt(torch.mean(hidden_state ** 2, dim=-1, keepdim=True) + 1e-5)
+        normalized_x = hidden_state / rms
+        model_output = normalized_x.to(torch.float16) * self.weights["model_layernorm_weight"]
+        logits = model_output.matmul(self.weights["lm_head_weight"].t())
+
+        # pick the last token
+        sample_output = torch.argmax(logits, dim=1)
+        return sample_output[-1].item()
+        
+
     
     def generate(self, input_string, rounds=20):
         input_ids = self.tokenizer.encode(input_string)
@@ -43,7 +133,7 @@ class Engine:
         print("Token IDs:", input_ids)
         output_ids = input_ids.copy()
 
-        new_token = self.run(output_ids)
+        new_token = self.run(output_ids, prefill=True)
         output_ids.append(new_token)
 
         for round in range(rounds - 1):
