@@ -1,0 +1,1551 @@
+Time,Output
+9.532924032770097,"# Coding and Modulation
+
+*How information sent over a link?*
+
+## Coding
+
+### None-return-to-zero (NRZ)
+
+1 is represented by a high voltage and a 0 is represented by a low voltage. This can however lead to problems with long runs of 1s or 0s.
+
+- **Long runs of 1s**: The receiver might lose track of the clock, and the signal might be corrupted.
+- **baseline wander**: The receiver keeps an average of the signal to determine the threshold for 1s and 0s. If there are long runs of 1s or 0s, the average might drift, and the receiver might start to misinterpret the signal.
+
+### Clock Recovery
+
+It is difficult to recover the clock from a NRZ signal that doesn't transition often. This is because the receiver doesn't know when to sample the signal. Several techniques are used to solve this problem, including manchester and scrambling. 
+
+### Return-to-Zero (RZ)
+
+After each bit, the signal returns to zero. This makes it easier to recover the clock, since the receiver can sample the signal after each return to zero.
+
+### Desigual (Differential Manchester)
+
+This is a combination of NRZ and RZ. The signal transitions between high and low after each bit, and the signal returns to zero after each bit. This makes it easy to recover the clock and also helps to reduce the effects of noise.
+
+### 8B10B
+
+This is a coding scheme that is used in many high-speed networks. It is a 10-bit code that is used to encode 8-bit data. The code includes a number of special codes that are used to indicate the start and end of a frame, as well as to indicate errors.
+
+### Forward Error Correction (F"
+11.24875608237926,"# Coding and Modulation
+
+*How information sent over a link?*
+
+## Coding
+
+### None-return-to-zero (NRZ)
+
+1 is represented by a high voltage and a 0 is represented by a low voltage. This can however lead to problems with long runs of 1s or 0s.
+
+- **Long runs of 1s**: The receiver might lose track of the clock, and the signal might be corrupted.
+- **baseline wander**: The receiver keeps an average of the signal to determine the threshold for 1s and 0s. If there are long runs of 1s or 0s, the average might drift, and the receiver might start to misinterpret the signal.
+
+### Clock Recovery
+
+It is difficult to recover the clock from a NRZ signal that doesn't transition often. This is because the receiver doesn't know when to sample the signal. Several techniques are used to solve this problem, including manchester and scrambling. 
+
+### Return-to-Zero (RZ)
+
+After each bit, the signal returns to zero. This makes it easier to recover the clock, since the receiver can sample the signal after each return to zero.
+
+### Desigual (Differential Manchester)
+
+This is a combination of NRZ and RZ. The signal transitions between high and low after each bit, and the signal returns to zero after each bit. This makes it easy to recover the clock and also helps to reduce the effects of noise.
+
+### 8B10B
+
+This is a coding scheme that is used in many high-speed networks. It is a 10-bit code that is used to encode 8-bit data. The code includes a number of special codes that are used to indicate the start and end of a frame, as well as to indicate errors.
+
+### Forward Error Correction (FEC)
+
+FEC is a technique that is used to detect and correct errors in digital signals. It works by adding redundant information to the signal, so that if the signal is corrupted, the receiver can use the redundant information to correct the error.
+
+### Modulation
+
+Modulation is the process of changing the characteristics of a signal to encode information. There are several types of modulation, including:
+
+### Amplitude Shift Keying (ASK)
+
+ASK is a type of modulation that changes the amplitude of the signal to encode information. The amplitude of the signal is changed to represent the 1s and 0s of the data.
+
+### Frequency Shift"
+15.133381929714233,"# Coding and Modulation
+
+*How information sent over a link?*
+
+## Coding
+
+### None-return-to-zero (NRZ)
+
+1 is represented by a high voltage and a 0 is represented by a low voltage. This can however lead to problems with long runs of 1s or 0s.
+
+- **Long runs of 1s**: The receiver might lose track of the clock, and the signal might be corrupted.
+- **baseline wander**: The receiver keeps an average of the signal to determine the threshold for 1s and 0s. If there are long runs of 1s or 0s, the average might drift, and the receiver might start to misinterpret the signal.
+
+### Clock Recovery
+
+It is difficult to recover the clock from a NRZ signal that doesn't transition often. This is because the receiver doesn't know when to sample the signal. Several techniques are used to solve this problem, including manchester and scrambling. 
+
+### Return-to-Zero (RZ)
+
+After each bit, the signal returns to zero. This makes it easier to recover the clock, since the receiver can sample the signal after each return to zero.
+
+### Desigual (Differential Manchester)
+
+This is a combination of NRZ and RZ. The signal transitions between high and low after each bit, and the signal returns to zero after each bit. This makes it easy to recover the clock and also helps to reduce the effects of noise.
+
+### 8B10B
+
+This is a coding scheme that is used in many high-speed networks. It is a 10-bit code that is used to encode 8-bit data. The code includes a number of special codes that are used to indicate the start and end of a frame, as well as to indicate errors.
+
+### Forward Error Correction (FEC)
+
+FEC is a technique that is used to detect and correct errors in digital signals. It works by adding redundant information to the signal, so that if the signal is corrupted, the receiver can use the redundant information to correct the error.
+
+### Modulation
+
+Modulation is the process of changing the characteristics of a signal to encode information. There are several types of modulation, including:
+
+### Amplitude Shift Keying (ASK)
+
+ASK is a type of modulation that changes the amplitude of the signal to encode information. The amplitude of the signal is changed to represent the 1s and 0s of the data.
+
+### Frequency Shift Keying (FSK)
+
+FSK is a type of modulation that changes the frequency of the signal to encode information. The frequency of the signal is changed to represent the 1s and 0s of the data.
+
+### Phase Shift Keying (PSK)
+
+PSK is a type of modulation that changes the phase of the signal to encode information. The phase of the signal is changed to represent the 1s and 0s of the data.
+
+### Quadrature Amplitude Modulation (QAM)
+
+QAM is a type of modulation that combines ASK and PSK. The amplitude and phase of the signal are changed"
+18.992897585150786,"# Coding and Modulation
+
+*How information sent over a link?*
+
+## Coding
+
+### None-return-to-zero (NRZ)
+
+1 is represented by a high voltage and a 0 is represented by a low voltage. This can however lead to problems with long runs of 1s or 0s.
+
+- **Long runs of 1s**: The receiver might lose track of the clock, and the signal might be corrupted.
+- **baseline wander**: The receiver keeps an average of the signal to determine the threshold for 1s and 0s. If there are long runs of 1s or 0s, the average might drift, and the receiver might start to misinterpret the signal.
+
+### Clock Recovery
+
+It is difficult to recover the clock from a NRZ signal that doesn't transition often. This is because the receiver doesn't know when to sample the signal. Several techniques are used to solve this problem, including manchester and scrambling. 
+
+### Return-to-Zero (RZ)
+
+After each bit, the signal returns to zero. This makes it easier to recover the clock, since the receiver can sample the signal after each return to zero.
+
+### Desigual (Differential Manchester)
+
+This is a combination of NRZ and RZ. The signal transitions between high and low after each bit, and the signal returns to zero after each bit. This makes it easy to recover the clock and also helps to reduce the effects of noise.
+
+### 8B10B
+
+This is a coding scheme that is used in many high-speed networks. It is a 10-bit code that is used to encode 8-bit data. The code includes a number of special codes that are used to indicate the start and end of a frame, as well as to indicate errors.
+
+### Forward Error Correction (FEC)
+
+FEC is a technique that is used to detect and correct errors in digital signals. It works by adding redundant information to the signal, so that if the signal is corrupted, the receiver can use the redundant information to correct the error.
+
+### Modulation
+
+Modulation is the process of changing the characteristics of a signal to encode information. There are several types of modulation, including:
+
+### Amplitude Shift Keying (ASK)
+
+ASK is a type of modulation that changes the amplitude of the signal to encode information. The amplitude of the signal is changed to represent the 1s and 0s of the data.
+
+### Frequency Shift Keying (FSK)
+
+FSK is a type of modulation that changes the frequency of the signal to encode information. The frequency of the signal is changed to represent the 1s and 0s of the data.
+
+### Phase Shift Keying (PSK)
+
+PSK is a type of modulation that changes the phase of the signal to encode information. The phase of the signal is changed to represent the 1s and 0s of the data.
+
+### Quadrature Amplitude Modulation (QAM)
+
+QAM is a type of modulation that combines ASK and PSK. The amplitude and phase of the signal are changed to encode information.
+
+### Quadrature Phase Shift Keying (QPSK)
+
+QPSK is a type of modulation that combines PSK and FSK. The phase and frequency of the signal are changed to encode information.
+
+### Orthogonal Frequency Division Multiplexing (OFDM)
+
+OFDM is a type of modulation that divides the signal into multiple subcarriers and transmits them simultaneously. This allows for high-speed data transmission over long distances.
+
+### Pulse Position Modulation (PPM)
+
+PPM is a type of modulation that changes the position of the signal pulses to encode information. The position of the signal pulses is changed to represent"
+22.856618180987425,"# Coding and Modulation
+
+*How information sent over a link?*
+
+## Coding
+
+### None-return-to-zero (NRZ)
+
+1 is represented by a high voltage and a 0 is represented by a low voltage. This can however lead to problems with long runs of 1s or 0s.
+
+- **Long runs of 1s**: The receiver might lose track of the clock, and the signal might be corrupted.
+- **baseline wander**: The receiver keeps an average of the signal to determine the threshold for 1s and 0s. If there are long runs of 1s or 0s, the average might drift, and the receiver might start to misinterpret the signal.
+
+### Clock Recovery
+
+It is difficult to recover the clock from a NRZ signal that doesn't transition often. This is because the receiver doesn't know when to sample the signal. Several techniques are used to solve this problem, including manchester and scrambling. 
+
+### Return-to-Zero (RZ)
+
+After each bit, the signal returns to zero. This makes it easier to recover the clock, since the receiver can sample the signal after each return to zero.
+
+### Desigual (Differential Manchester)
+
+This is a combination of NRZ and RZ. The signal transitions between high and low after each bit, and the signal returns to zero after each bit. This makes it easy to recover the clock and also helps to reduce the effects of noise.
+
+### 8B10B
+
+This is a coding scheme that is used in many high-speed networks. It is a 10-bit code that is used to encode 8-bit data. The code includes a number of special codes that are used to indicate the start and end of a frame, as well as to indicate errors.
+
+### Forward Error Correction (FEC)
+
+FEC is a technique that is used to detect and correct errors in digital signals. It works by adding redundant information to the signal, so that if the signal is corrupted, the receiver can use the redundant information to correct the error.
+
+### Modulation
+
+Modulation is the process of changing the characteristics of a signal to encode information. There are several types of modulation, including:
+
+### Amplitude Shift Keying (ASK)
+
+ASK is a type of modulation that changes the amplitude of the signal to encode information. The amplitude of the signal is changed to represent the 1s and 0s of the data.
+
+### Frequency Shift Keying (FSK)
+
+FSK is a type of modulation that changes the frequency of the signal to encode information. The frequency of the signal is changed to represent the 1s and 0s of the data.
+
+### Phase Shift Keying (PSK)
+
+PSK is a type of modulation that changes the phase of the signal to encode information. The phase of the signal is changed to represent the 1s and 0s of the data.
+
+### Quadrature Amplitude Modulation (QAM)
+
+QAM is a type of modulation that combines ASK and PSK. The amplitude and phase of the signal are changed to encode information.
+
+### Quadrature Phase Shift Keying (QPSK)
+
+QPSK is a type of modulation that combines PSK and FSK. The phase and frequency of the signal are changed to encode information.
+
+### Orthogonal Frequency Division Multiplexing (OFDM)
+
+OFDM is a type of modulation that divides the signal into multiple subcarriers and transmits them simultaneously. This allows for high-speed data transmission over long distances.
+
+### Pulse Position Modulation (PPM)
+
+PPM is a type of modulation that changes the position of the signal pulses to encode information. The position of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a"
+26.712721102288924,"# Coding and Modulation
+
+*How information sent over a link?*
+
+## Coding
+
+### None-return-to-zero (NRZ)
+
+1 is represented by a high voltage and a 0 is represented by a low voltage. This can however lead to problems with long runs of 1s or 0s.
+
+- **Long runs of 1s**: The receiver might lose track of the clock, and the signal might be corrupted.
+- **baseline wander**: The receiver keeps an average of the signal to determine the threshold for 1s and 0s. If there are long runs of 1s or 0s, the average might drift, and the receiver might start to misinterpret the signal.
+
+### Clock Recovery
+
+It is difficult to recover the clock from a NRZ signal that doesn't transition often. This is because the receiver doesn't know when to sample the signal. Several techniques are used to solve this problem, including manchester and scrambling. 
+
+### Return-to-Zero (RZ)
+
+After each bit, the signal returns to zero. This makes it easier to recover the clock, since the receiver can sample the signal after each return to zero.
+
+### Desigual (Differential Manchester)
+
+This is a combination of NRZ and RZ. The signal transitions between high and low after each bit, and the signal returns to zero after each bit. This makes it easy to recover the clock and also helps to reduce the effects of noise.
+
+### 8B10B
+
+This is a coding scheme that is used in many high-speed networks. It is a 10-bit code that is used to encode 8-bit data. The code includes a number of special codes that are used to indicate the start and end of a frame, as well as to indicate errors.
+
+### Forward Error Correction (FEC)
+
+FEC is a technique that is used to detect and correct errors in digital signals. It works by adding redundant information to the signal, so that if the signal is corrupted, the receiver can use the redundant information to correct the error.
+
+### Modulation
+
+Modulation is the process of changing the characteristics of a signal to encode information. There are several types of modulation, including:
+
+### Amplitude Shift Keying (ASK)
+
+ASK is a type of modulation that changes the amplitude of the signal to encode information. The amplitude of the signal is changed to represent the 1s and 0s of the data.
+
+### Frequency Shift Keying (FSK)
+
+FSK is a type of modulation that changes the frequency of the signal to encode information. The frequency of the signal is changed to represent the 1s and 0s of the data.
+
+### Phase Shift Keying (PSK)
+
+PSK is a type of modulation that changes the phase of the signal to encode information. The phase of the signal is changed to represent the 1s and 0s of the data.
+
+### Quadrature Amplitude Modulation (QAM)
+
+QAM is a type of modulation that combines ASK and PSK. The amplitude and phase of the signal are changed to encode information.
+
+### Quadrature Phase Shift Keying (QPSK)
+
+QPSK is a type of modulation that combines PSK and FSK. The phase and frequency of the signal are changed to encode information.
+
+### Orthogonal Frequency Division Multiplexing (OFDM)
+
+OFDM is a type of modulation that divides the signal into multiple subcarriers and transmits them simultaneously. This allows for high-speed data transmission over long distances.
+
+### Pulse Position Modulation (PPM)
+
+PPM is a type of modulation that changes the position of the signal pulses to encode information. The position of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the"
+30.569793493836187,"# Coding and Modulation
+
+*How information sent over a link?*
+
+## Coding
+
+### None-return-to-zero (NRZ)
+
+1 is represented by a high voltage and a 0 is represented by a low voltage. This can however lead to problems with long runs of 1s or 0s.
+
+- **Long runs of 1s**: The receiver might lose track of the clock, and the signal might be corrupted.
+- **baseline wander**: The receiver keeps an average of the signal to determine the threshold for 1s and 0s. If there are long runs of 1s or 0s, the average might drift, and the receiver might start to misinterpret the signal.
+
+### Clock Recovery
+
+It is difficult to recover the clock from a NRZ signal that doesn't transition often. This is because the receiver doesn't know when to sample the signal. Several techniques are used to solve this problem, including manchester and scrambling. 
+
+### Return-to-Zero (RZ)
+
+After each bit, the signal returns to zero. This makes it easier to recover the clock, since the receiver can sample the signal after each return to zero.
+
+### Desigual (Differential Manchester)
+
+This is a combination of NRZ and RZ. The signal transitions between high and low after each bit, and the signal returns to zero after each bit. This makes it easy to recover the clock and also helps to reduce the effects of noise.
+
+### 8B10B
+
+This is a coding scheme that is used in many high-speed networks. It is a 10-bit code that is used to encode 8-bit data. The code includes a number of special codes that are used to indicate the start and end of a frame, as well as to indicate errors.
+
+### Forward Error Correction (FEC)
+
+FEC is a technique that is used to detect and correct errors in digital signals. It works by adding redundant information to the signal, so that if the signal is corrupted, the receiver can use the redundant information to correct the error.
+
+### Modulation
+
+Modulation is the process of changing the characteristics of a signal to encode information. There are several types of modulation, including:
+
+### Amplitude Shift Keying (ASK)
+
+ASK is a type of modulation that changes the amplitude of the signal to encode information. The amplitude of the signal is changed to represent the 1s and 0s of the data.
+
+### Frequency Shift Keying (FSK)
+
+FSK is a type of modulation that changes the frequency of the signal to encode information. The frequency of the signal is changed to represent the 1s and 0s of the data.
+
+### Phase Shift Keying (PSK)
+
+PSK is a type of modulation that changes the phase of the signal to encode information. The phase of the signal is changed to represent the 1s and 0s of the data.
+
+### Quadrature Amplitude Modulation (QAM)
+
+QAM is a type of modulation that combines ASK and PSK. The amplitude and phase of the signal are changed to encode information.
+
+### Quadrature Phase Shift Keying (QPSK)
+
+QPSK is a type of modulation that combines PSK and FSK. The phase and frequency of the signal are changed to encode information.
+
+### Orthogonal Frequency Division Multiplexing (OFDM)
+
+OFDM is a type of modulation that divides the signal into multiple subcarriers and transmits them simultaneously. This allows for high-speed data transmission over long distances.
+
+### Pulse Position Modulation (PPM)
+
+PPM is a type of modulation that changes the position of the signal pulses to encode information. The position of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a"
+34.469410775694996,"# Coding and Modulation
+
+*How information sent over a link?*
+
+## Coding
+
+### None-return-to-zero (NRZ)
+
+1 is represented by a high voltage and a 0 is represented by a low voltage. This can however lead to problems with long runs of 1s or 0s.
+
+- **Long runs of 1s**: The receiver might lose track of the clock, and the signal might be corrupted.
+- **baseline wander**: The receiver keeps an average of the signal to determine the threshold for 1s and 0s. If there are long runs of 1s or 0s, the average might drift, and the receiver might start to misinterpret the signal.
+
+### Clock Recovery
+
+It is difficult to recover the clock from a NRZ signal that doesn't transition often. This is because the receiver doesn't know when to sample the signal. Several techniques are used to solve this problem, including manchester and scrambling. 
+
+### Return-to-Zero (RZ)
+
+After each bit, the signal returns to zero. This makes it easier to recover the clock, since the receiver can sample the signal after each return to zero.
+
+### Desigual (Differential Manchester)
+
+This is a combination of NRZ and RZ. The signal transitions between high and low after each bit, and the signal returns to zero after each bit. This makes it easy to recover the clock and also helps to reduce the effects of noise.
+
+### 8B10B
+
+This is a coding scheme that is used in many high-speed networks. It is a 10-bit code that is used to encode 8-bit data. The code includes a number of special codes that are used to indicate the start and end of a frame, as well as to indicate errors.
+
+### Forward Error Correction (FEC)
+
+FEC is a technique that is used to detect and correct errors in digital signals. It works by adding redundant information to the signal, so that if the signal is corrupted, the receiver can use the redundant information to correct the error.
+
+### Modulation
+
+Modulation is the process of changing the characteristics of a signal to encode information. There are several types of modulation, including:
+
+### Amplitude Shift Keying (ASK)
+
+ASK is a type of modulation that changes the amplitude of the signal to encode information. The amplitude of the signal is changed to represent the 1s and 0s of the data.
+
+### Frequency Shift Keying (FSK)
+
+FSK is a type of modulation that changes the frequency of the signal to encode information. The frequency of the signal is changed to represent the 1s and 0s of the data.
+
+### Phase Shift Keying (PSK)
+
+PSK is a type of modulation that changes the phase of the signal to encode information. The phase of the signal is changed to represent the 1s and 0s of the data.
+
+### Quadrature Amplitude Modulation (QAM)
+
+QAM is a type of modulation that combines ASK and PSK. The amplitude and phase of the signal are changed to encode information.
+
+### Quadrature Phase Shift Keying (QPSK)
+
+QPSK is a type of modulation that combines PSK and FSK. The phase and frequency of the signal are changed to encode information.
+
+### Orthogonal Frequency Division Multiplexing (OFDM)
+
+OFDM is a type of modulation that divides the signal into multiple subcarriers and transmits them simultaneously. This allows for high-speed data transmission over long distances.
+
+### Pulse Position Modulation (PPM)
+
+PPM is a type of modulation that changes the position of the signal pulses to encode information. The position of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta"
+38.34488395298831,"# Coding and Modulation
+
+*How information sent over a link?*
+
+## Coding
+
+### None-return-to-zero (NRZ)
+
+1 is represented by a high voltage and a 0 is represented by a low voltage. This can however lead to problems with long runs of 1s or 0s.
+
+- **Long runs of 1s**: The receiver might lose track of the clock, and the signal might be corrupted.
+- **baseline wander**: The receiver keeps an average of the signal to determine the threshold for 1s and 0s. If there are long runs of 1s or 0s, the average might drift, and the receiver might start to misinterpret the signal.
+
+### Clock Recovery
+
+It is difficult to recover the clock from a NRZ signal that doesn't transition often. This is because the receiver doesn't know when to sample the signal. Several techniques are used to solve this problem, including manchester and scrambling. 
+
+### Return-to-Zero (RZ)
+
+After each bit, the signal returns to zero. This makes it easier to recover the clock, since the receiver can sample the signal after each return to zero.
+
+### Desigual (Differential Manchester)
+
+This is a combination of NRZ and RZ. The signal transitions between high and low after each bit, and the signal returns to zero after each bit. This makes it easy to recover the clock and also helps to reduce the effects of noise.
+
+### 8B10B
+
+This is a coding scheme that is used in many high-speed networks. It is a 10-bit code that is used to encode 8-bit data. The code includes a number of special codes that are used to indicate the start and end of a frame, as well as to indicate errors.
+
+### Forward Error Correction (FEC)
+
+FEC is a technique that is used to detect and correct errors in digital signals. It works by adding redundant information to the signal, so that if the signal is corrupted, the receiver can use the redundant information to correct the error.
+
+### Modulation
+
+Modulation is the process of changing the characteristics of a signal to encode information. There are several types of modulation, including:
+
+### Amplitude Shift Keying (ASK)
+
+ASK is a type of modulation that changes the amplitude of the signal to encode information. The amplitude of the signal is changed to represent the 1s and 0s of the data.
+
+### Frequency Shift Keying (FSK)
+
+FSK is a type of modulation that changes the frequency of the signal to encode information. The frequency of the signal is changed to represent the 1s and 0s of the data.
+
+### Phase Shift Keying (PSK)
+
+PSK is a type of modulation that changes the phase of the signal to encode information. The phase of the signal is changed to represent the 1s and 0s of the data.
+
+### Quadrature Amplitude Modulation (QAM)
+
+QAM is a type of modulation that combines ASK and PSK. The amplitude and phase of the signal are changed to encode information.
+
+### Quadrature Phase Shift Keying (QPSK)
+
+QPSK is a type of modulation that combines PSK and FSK. The phase and frequency of the signal are changed to encode information.
+
+### Orthogonal Frequency Division Multiplexing (OFDM)
+
+OFDM is a type of modulation that divides the signal into multiple subcarriers and transmits them simultaneously. This allows for high-speed data transmission over long distances.
+
+### Pulse Position Modulation (PPM)
+
+PPM is a type of modulation that changes the position of the signal pulses to encode information. The position of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse"
+42.43023328669369,"# Coding and Modulation
+
+*How information sent over a link?*
+
+## Coding
+
+### None-return-to-zero (NRZ)
+
+1 is represented by a high voltage and a 0 is represented by a low voltage. This can however lead to problems with long runs of 1s or 0s.
+
+- **Long runs of 1s**: The receiver might lose track of the clock, and the signal might be corrupted.
+- **baseline wander**: The receiver keeps an average of the signal to determine the threshold for 1s and 0s. If there are long runs of 1s or 0s, the average might drift, and the receiver might start to misinterpret the signal.
+
+### Clock Recovery
+
+It is difficult to recover the clock from a NRZ signal that doesn't transition often. This is because the receiver doesn't know when to sample the signal. Several techniques are used to solve this problem, including manchester and scrambling. 
+
+### Return-to-Zero (RZ)
+
+After each bit, the signal returns to zero. This makes it easier to recover the clock, since the receiver can sample the signal after each return to zero.
+
+### Desigual (Differential Manchester)
+
+This is a combination of NRZ and RZ. The signal transitions between high and low after each bit, and the signal returns to zero after each bit. This makes it easy to recover the clock and also helps to reduce the effects of noise.
+
+### 8B10B
+
+This is a coding scheme that is used in many high-speed networks. It is a 10-bit code that is used to encode 8-bit data. The code includes a number of special codes that are used to indicate the start and end of a frame, as well as to indicate errors.
+
+### Forward Error Correction (FEC)
+
+FEC is a technique that is used to detect and correct errors in digital signals. It works by adding redundant information to the signal, so that if the signal is corrupted, the receiver can use the redundant information to correct the error.
+
+### Modulation
+
+Modulation is the process of changing the characteristics of a signal to encode information. There are several types of modulation, including:
+
+### Amplitude Shift Keying (ASK)
+
+ASK is a type of modulation that changes the amplitude of the signal to encode information. The amplitude of the signal is changed to represent the 1s and 0s of the data.
+
+### Frequency Shift Keying (FSK)
+
+FSK is a type of modulation that changes the frequency of the signal to encode information. The frequency of the signal is changed to represent the 1s and 0s of the data.
+
+### Phase Shift Keying (PSK)
+
+PSK is a type of modulation that changes the phase of the signal to encode information. The phase of the signal is changed to represent the 1s and 0s of the data.
+
+### Quadrature Amplitude Modulation (QAM)
+
+QAM is a type of modulation that combines ASK and PSK. The amplitude and phase of the signal are changed to encode information.
+
+### Quadrature Phase Shift Keying (QPSK)
+
+QPSK is a type of modulation that combines PSK and FSK. The phase and frequency of the signal are changed to encode information.
+
+### Orthogonal Frequency Division Multiplexing (OFDM)
+
+OFDM is a type of modulation that divides the signal into multiple subcarriers and transmits them simultaneously. This allows for high-speed data transmission over long distances.
+
+### Pulse Position Modulation (PPM)
+
+PPM is a type of modulation that changes the position of the signal pulses to encode information. The position of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma mod"
+46.35606966819614,"# Coding and Modulation
+
+*How information sent over a link?*
+
+## Coding
+
+### None-return-to-zero (NRZ)
+
+1 is represented by a high voltage and a 0 is represented by a low voltage. This can however lead to problems with long runs of 1s or 0s.
+
+- **Long runs of 1s**: The receiver might lose track of the clock, and the signal might be corrupted.
+- **baseline wander**: The receiver keeps an average of the signal to determine the threshold for 1s and 0s. If there are long runs of 1s or 0s, the average might drift, and the receiver might start to misinterpret the signal.
+
+### Clock Recovery
+
+It is difficult to recover the clock from a NRZ signal that doesn't transition often. This is because the receiver doesn't know when to sample the signal. Several techniques are used to solve this problem, including manchester and scrambling. 
+
+### Return-to-Zero (RZ)
+
+After each bit, the signal returns to zero. This makes it easier to recover the clock, since the receiver can sample the signal after each return to zero.
+
+### Desigual (Differential Manchester)
+
+This is a combination of NRZ and RZ. The signal transitions between high and low after each bit, and the signal returns to zero after each bit. This makes it easy to recover the clock and also helps to reduce the effects of noise.
+
+### 8B10B
+
+This is a coding scheme that is used in many high-speed networks. It is a 10-bit code that is used to encode 8-bit data. The code includes a number of special codes that are used to indicate the start and end of a frame, as well as to indicate errors.
+
+### Forward Error Correction (FEC)
+
+FEC is a technique that is used to detect and correct errors in digital signals. It works by adding redundant information to the signal, so that if the signal is corrupted, the receiver can use the redundant information to correct the error.
+
+### Modulation
+
+Modulation is the process of changing the characteristics of a signal to encode information. There are several types of modulation, including:
+
+### Amplitude Shift Keying (ASK)
+
+ASK is a type of modulation that changes the amplitude of the signal to encode information. The amplitude of the signal is changed to represent the 1s and 0s of the data.
+
+### Frequency Shift Keying (FSK)
+
+FSK is a type of modulation that changes the frequency of the signal to encode information. The frequency of the signal is changed to represent the 1s and 0s of the data.
+
+### Phase Shift Keying (PSK)
+
+PSK is a type of modulation that changes the phase of the signal to encode information. The phase of the signal is changed to represent the 1s and 0s of the data.
+
+### Quadrature Amplitude Modulation (QAM)
+
+QAM is a type of modulation that combines ASK and PSK. The amplitude and phase of the signal are changed to encode information.
+
+### Quadrature Phase Shift Keying (QPSK)
+
+QPSK is a type of modulation that combines PSK and FSK. The phase and frequency of the signal are changed to encode information.
+
+### Orthogonal Frequency Division Multiplexing (OFDM)
+
+OFDM is a type of modulation that divides the signal into multiple subcarriers and transmits them simultaneously. This allows for high-speed data transmission over long distances.
+
+### Pulse Position Modulation (PPM)
+
+PPM is a type of modulation that changes the position of the signal pulses to encode information. The position of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s"
+50.217871311935596,"# Coding and Modulation
+
+*How information sent over a link?*
+
+## Coding
+
+### None-return-to-zero (NRZ)
+
+1 is represented by a high voltage and a 0 is represented by a low voltage. This can however lead to problems with long runs of 1s or 0s.
+
+- **Long runs of 1s**: The receiver might lose track of the clock, and the signal might be corrupted.
+- **baseline wander**: The receiver keeps an average of the signal to determine the threshold for 1s and 0s. If there are long runs of 1s or 0s, the average might drift, and the receiver might start to misinterpret the signal.
+
+### Clock Recovery
+
+It is difficult to recover the clock from a NRZ signal that doesn't transition often. This is because the receiver doesn't know when to sample the signal. Several techniques are used to solve this problem, including manchester and scrambling. 
+
+### Return-to-Zero (RZ)
+
+After each bit, the signal returns to zero. This makes it easier to recover the clock, since the receiver can sample the signal after each return to zero.
+
+### Desigual (Differential Manchester)
+
+This is a combination of NRZ and RZ. The signal transitions between high and low after each bit, and the signal returns to zero after each bit. This makes it easy to recover the clock and also helps to reduce the effects of noise.
+
+### 8B10B
+
+This is a coding scheme that is used in many high-speed networks. It is a 10-bit code that is used to encode 8-bit data. The code includes a number of special codes that are used to indicate the start and end of a frame, as well as to indicate errors.
+
+### Forward Error Correction (FEC)
+
+FEC is a technique that is used to detect and correct errors in digital signals. It works by adding redundant information to the signal, so that if the signal is corrupted, the receiver can use the redundant information to correct the error.
+
+### Modulation
+
+Modulation is the process of changing the characteristics of a signal to encode information. There are several types of modulation, including:
+
+### Amplitude Shift Keying (ASK)
+
+ASK is a type of modulation that changes the amplitude of the signal to encode information. The amplitude of the signal is changed to represent the 1s and 0s of the data.
+
+### Frequency Shift Keying (FSK)
+
+FSK is a type of modulation that changes the frequency of the signal to encode information. The frequency of the signal is changed to represent the 1s and 0s of the data.
+
+### Phase Shift Keying (PSK)
+
+PSK is a type of modulation that changes the phase of the signal to encode information. The phase of the signal is changed to represent the 1s and 0s of the data.
+
+### Quadrature Amplitude Modulation (QAM)
+
+QAM is a type of modulation that combines ASK and PSK. The amplitude and phase of the signal are changed to encode information.
+
+### Quadrature Phase Shift Keying (QPSK)
+
+QPSK is a type of modulation that combines PSK and FSK. The phase and frequency of the signal are changed to encode information.
+
+### Orthogonal Frequency Division Multiplexing (OFDM)
+
+OFDM is a type of modulation that divides the signal into multiple subcarriers and transmits them simultaneously. This allows for high-speed data transmission over long distances.
+
+### Pulse Position Modulation (PPM)
+
+PPM is a type of modulation that changes the position of the signal pulses to encode information. The position of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information"
+54.169025613577105,"# Coding and Modulation
+
+*How information sent over a link?*
+
+## Coding
+
+### None-return-to-zero (NRZ)
+
+1 is represented by a high voltage and a 0 is represented by a low voltage. This can however lead to problems with long runs of 1s or 0s.
+
+- **Long runs of 1s**: The receiver might lose track of the clock, and the signal might be corrupted.
+- **baseline wander**: The receiver keeps an average of the signal to determine the threshold for 1s and 0s. If there are long runs of 1s or 0s, the average might drift, and the receiver might start to misinterpret the signal.
+
+### Clock Recovery
+
+It is difficult to recover the clock from a NRZ signal that doesn't transition often. This is because the receiver doesn't know when to sample the signal. Several techniques are used to solve this problem, including manchester and scrambling. 
+
+### Return-to-Zero (RZ)
+
+After each bit, the signal returns to zero. This makes it easier to recover the clock, since the receiver can sample the signal after each return to zero.
+
+### Desigual (Differential Manchester)
+
+This is a combination of NRZ and RZ. The signal transitions between high and low after each bit, and the signal returns to zero after each bit. This makes it easy to recover the clock and also helps to reduce the effects of noise.
+
+### 8B10B
+
+This is a coding scheme that is used in many high-speed networks. It is a 10-bit code that is used to encode 8-bit data. The code includes a number of special codes that are used to indicate the start and end of a frame, as well as to indicate errors.
+
+### Forward Error Correction (FEC)
+
+FEC is a technique that is used to detect and correct errors in digital signals. It works by adding redundant information to the signal, so that if the signal is corrupted, the receiver can use the redundant information to correct the error.
+
+### Modulation
+
+Modulation is the process of changing the characteristics of a signal to encode information. There are several types of modulation, including:
+
+### Amplitude Shift Keying (ASK)
+
+ASK is a type of modulation that changes the amplitude of the signal to encode information. The amplitude of the signal is changed to represent the 1s and 0s of the data.
+
+### Frequency Shift Keying (FSK)
+
+FSK is a type of modulation that changes the frequency of the signal to encode information. The frequency of the signal is changed to represent the 1s and 0s of the data.
+
+### Phase Shift Keying (PSK)
+
+PSK is a type of modulation that changes the phase of the signal to encode information. The phase of the signal is changed to represent the 1s and 0s of the data.
+
+### Quadrature Amplitude Modulation (QAM)
+
+QAM is a type of modulation that combines ASK and PSK. The amplitude and phase of the signal are changed to encode information.
+
+### Quadrature Phase Shift Keying (QPSK)
+
+QPSK is a type of modulation that combines PSK and FSK. The phase and frequency of the signal are changed to encode information.
+
+### Orthogonal Frequency Division Multiplexing (OFDM)
+
+OFDM is a type of modulation that divides the signal into multiple subcarriers and transmits them simultaneously. This allows for high-speed data transmission over long distances.
+
+### Pulse Position Modulation (PPM)
+
+PPM is a type of modulation that changes the position of the signal pulses to encode information. The position of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a"
+58.81886241817847,"# Coding and Modulation
+
+*How information sent over a link?*
+
+## Coding
+
+### None-return-to-zero (NRZ)
+
+1 is represented by a high voltage and a 0 is represented by a low voltage. This can however lead to problems with long runs of 1s or 0s.
+
+- **Long runs of 1s**: The receiver might lose track of the clock, and the signal might be corrupted.
+- **baseline wander**: The receiver keeps an average of the signal to determine the threshold for 1s and 0s. If there are long runs of 1s or 0s, the average might drift, and the receiver might start to misinterpret the signal.
+
+### Clock Recovery
+
+It is difficult to recover the clock from a NRZ signal that doesn't transition often. This is because the receiver doesn't know when to sample the signal. Several techniques are used to solve this problem, including manchester and scrambling. 
+
+### Return-to-Zero (RZ)
+
+After each bit, the signal returns to zero. This makes it easier to recover the clock, since the receiver can sample the signal after each return to zero.
+
+### Desigual (Differential Manchester)
+
+This is a combination of NRZ and RZ. The signal transitions between high and low after each bit, and the signal returns to zero after each bit. This makes it easy to recover the clock and also helps to reduce the effects of noise.
+
+### 8B10B
+
+This is a coding scheme that is used in many high-speed networks. It is a 10-bit code that is used to encode 8-bit data. The code includes a number of special codes that are used to indicate the start and end of a frame, as well as to indicate errors.
+
+### Forward Error Correction (FEC)
+
+FEC is a technique that is used to detect and correct errors in digital signals. It works by adding redundant information to the signal, so that if the signal is corrupted, the receiver can use the redundant information to correct the error.
+
+### Modulation
+
+Modulation is the process of changing the characteristics of a signal to encode information. There are several types of modulation, including:
+
+### Amplitude Shift Keying (ASK)
+
+ASK is a type of modulation that changes the amplitude of the signal to encode information. The amplitude of the signal is changed to represent the 1s and 0s of the data.
+
+### Frequency Shift Keying (FSK)
+
+FSK is a type of modulation that changes the frequency of the signal to encode information. The frequency of the signal is changed to represent the 1s and 0s of the data.
+
+### Phase Shift Keying (PSK)
+
+PSK is a type of modulation that changes the phase of the signal to encode information. The phase of the signal is changed to represent the 1s and 0s of the data.
+
+### Quadrature Amplitude Modulation (QAM)
+
+QAM is a type of modulation that combines ASK and PSK. The amplitude and phase of the signal are changed to encode information.
+
+### Quadrature Phase Shift Keying (QPSK)
+
+QPSK is a type of modulation that combines PSK and FSK. The phase and frequency of the signal are changed to encode information.
+
+### Orthogonal Frequency Division Multiplexing (OFDM)
+
+OFDM is a type of modulation that divides the signal into multiple subcarriers and transmits them simultaneously. This allows for high-speed data transmission over long distances.
+
+### Pulse Position Modulation (PPM)
+
+PPM is a type of modulation that changes the position of the signal pulses to encode information. The position of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes"
+61.61507903470192,"# Coding and Modulation
+
+*How information sent over a link?*
+
+## Coding
+
+### None-return-to-zero (NRZ)
+
+1 is represented by a high voltage and a 0 is represented by a low voltage. This can however lead to problems with long runs of 1s or 0s.
+
+- **Long runs of 1s**: The receiver might lose track of the clock, and the signal might be corrupted.
+- **baseline wander**: The receiver keeps an average of the signal to determine the threshold for 1s and 0s. If there are long runs of 1s or 0s, the average might drift, and the receiver might start to misinterpret the signal.
+
+### Clock Recovery
+
+It is difficult to recover the clock from a NRZ signal that doesn't transition often. This is because the receiver doesn't know when to sample the signal. Several techniques are used to solve this problem, including manchester and scrambling. 
+
+### Return-to-Zero (RZ)
+
+After each bit, the signal returns to zero. This makes it easier to recover the clock, since the receiver can sample the signal after each return to zero.
+
+### Desigual (Differential Manchester)
+
+This is a combination of NRZ and RZ. The signal transitions between high and low after each bit, and the signal returns to zero after each bit. This makes it easy to recover the clock and also helps to reduce the effects of noise.
+
+### 8B10B
+
+This is a coding scheme that is used in many high-speed networks. It is a 10-bit code that is used to encode 8-bit data. The code includes a number of special codes that are used to indicate the start and end of a frame, as well as to indicate errors.
+
+### Forward Error Correction (FEC)
+
+FEC is a technique that is used to detect and correct errors in digital signals. It works by adding redundant information to the signal, so that if the signal is corrupted, the receiver can use the redundant information to correct the error.
+
+### Modulation
+
+Modulation is the process of changing the characteristics of a signal to encode information. There are several types of modulation, including:
+
+### Amplitude Shift Keying (ASK)
+
+ASK is a type of modulation that changes the amplitude of the signal to encode information. The amplitude of the signal is changed to represent the 1s and 0s of the data.
+
+### Frequency Shift Keying (FSK)
+
+FSK is a type of modulation that changes the frequency of the signal to encode information. The frequency of the signal is changed to represent the 1s and 0s of the data.
+
+### Phase Shift Keying (PSK)
+
+PSK is a type of modulation that changes the phase of the signal to encode information. The phase of the signal is changed to represent the 1s and 0s of the data.
+
+### Quadrature Amplitude Modulation (QAM)
+
+QAM is a type of modulation that combines ASK and PSK. The amplitude and phase of the signal are changed to encode information.
+
+### Quadrature Phase Shift Keying (QPSK)
+
+QPSK is a type of modulation that combines PSK and FSK. The phase and frequency of the signal are changed to encode information.
+
+### Orthogonal Frequency Division Multiplexing (OFDM)
+
+OFDM is a type of modulation that divides the signal into multiple subcarriers and transmits them simultaneously. This allows for high-speed data transmission over long distances.
+
+### Pulse Position Modulation (PPM)
+
+PPM is a type of modulation that changes the position of the signal pulses to encode information. The position of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation (PCM)
+
+PCM is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation (DSM)
+
+DSM is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Sigma-Delta Modulation (SDM)
+
+SDM is a type of modulation that uses a sigma-delta modulator to encode information. The sigma-delta modulator is a type of analog-to-digital converter that uses a combination of analog and digital techniques to encode the signal.
+
+### Pulse Density Modulation (PDM)
+
+PDM is a type of modulation that changes the density of the signal pulses to encode information. The density of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Amplitude Modulation (PAM)
+
+PAM is a type of modulation that changes the amplitude of the signal pulses to encode information. The amplitude of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Width Modulation (PWM)
+
+PWM is a type of modulation that changes the width of the signal pulses to encode information. The width of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Pulse Code Modulation
+
+Pulse modulation is a type of modulation that changes the code of the signal pulses to encode information. The code of the signal pulses is changed to represent the 1s and 0s of the data.
+
+### Delta-Sigma Modulation
+
+Delta-sigma modulation is a type of modulation that uses a delta-sigma modulator to encode information. The delta-sigma modulator is a type of analog-to-digital converter that uses a combination of"

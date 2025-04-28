@@ -1,8 +1,8 @@
+import sys
+sys.path.append("../")
 import torch
 from transformers import AutoTokenizer
-import sys
 from helper import WeightManager, apply_rope, extract_model_weights
-import time
 
 
 class Engine:
@@ -46,7 +46,7 @@ class Engine:
             v = x.matmul(self.weights["self_attn_v_proj_weight"][current_layer].t())
             q = x.matmul(self.weights["self_attn_q_proj_weight"][current_layer].t())
             
-            # Apply RoPE to query and key
+            # Apply RoPE to query and key using the helper function
             apply_rope(q, output=q, head_dim=self.head_dim, offset=0)
             apply_rope(k, output=k, head_dim=self.head_dim, offset=0)
             
@@ -68,14 +68,14 @@ class Engine:
             
             scores = torch.matmul(sub_q_t, sub_k_t.transpose(-2, -1)) * scale # (num_qo_heads, seq_len, seq_len)
             
-            causal_mask = torch.tril(torch.ones(n_q, n_k, dtype=torch.bool, device=scores.device))  # (seq_len, seq_len)
-            scores = scores.masked_fill(~causal_mask.unsqueeze(0), float("-inf"))                   # (1, seq_len, seq_len)
+            causal_mask = torch.tril(torch.ones(n_q, n_k, dtype=torch.bool, device=scores.device)) # (seq_len, seq_len)
+            scores = scores.masked_fill(~causal_mask.unsqueeze(0), float("-inf")) # (1, seq_len, seq_len)
             
             attn_weights = torch.softmax(scores, dim=-1)
             
-            v_t = sub_v.permute(1, 0, 2)                    # (num_qo_heads, seq_len, head_dim)
-            attn_output = torch.matmul(attn_weights, v_t)   # (num_qo_heads, seq_len, head_dim)
-            attn_output = attn_output.permute(1, 0, 2)      # (seq_len, num_qo_heads, head_dim)
+            v_t = sub_v.permute(1, 0, 2) # (num_qo_heads, seq_len, head_dim)
+            attn_output = torch.matmul(attn_weights, v_t) # (num_qo_heads, seq_len, head_dim)
+            attn_output = attn_output.permute(1, 0, 2) # (seq_len, num_qo_heads, head_dim)
             
             attn_output = attn_output.reshape(-1, self.num_qo_heads * self.head_dim) # (seq_len, num_qo_heads * head_dim)
             prefill_output = attn_output.matmul(self.weights["o_proj_weight"][current_layer].t()) + hidden_state
@@ -103,23 +103,19 @@ class Engine:
     def generate(self, input_string, rounds=20):
         input_ids = self.tokenizer.encode(input_string)
 
+        # print("Token IDs:", input_ids)
         output_ids = input_ids.copy()
-        time_taken = 0
-        start = time.perf_counter()
+
         new_token = self.run(output_ids)
-        stop = time.perf_counter()
-        time_taken += ( stop - start )
         output_ids.append(new_token)
 
         for round in range(rounds - 1):
-            start = time.perf_counter()
+            # print(f"Round {round}")
             new_token = self.run(output_ids, prefill=True)
-            stop = time.perf_counter()
-            time_taken += ( stop - start )
             output_ids.append(new_token)
 
         output_text = self.tokenizer.decode(output_ids, skip_special_tokens=True)
-        return output_text, time_taken
+        return output_text
 
 ########################################
 # Main Loop: Text Generation
@@ -127,5 +123,5 @@ class Engine:
 if __name__ == "__main__":
     input_string = "Hi, who are you?"
     engine = Engine()
-    output_text, t = engine.generate(input_string, rounds=20)
-    print(f"Generated Text: {output_text}, time: {t}s")
+    output_text = engine.generate(input_string, rounds=20)
+    print("Generated Text:", output_text)
