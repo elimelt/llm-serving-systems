@@ -3,7 +3,6 @@ from transformers import AutoTokenizer
 import sys
 sys.path.append("../")  # Adjust the path to import the helper module
 from helper import WeightManager, apply_rope, extract_model_weights
-import time
 
 
 class Engine:
@@ -32,110 +31,105 @@ class Engine:
         
         # Initialize KV cache and sequence tracking
         self.kv_cache = {}
-        self.seq_len = 0
     
     def run(self, input_ids, prefill=True):
-        # manage kv cache and position tracking
+        # manage kv cache and position tracking    
         if prefill:
-            self.kv_cache = {}
-            self.seq_len = 0
-            offset = 0
-        else:
-            offset = self.seq_len
+            self.kv_cache.clear()
 
-        input_tensor = torch.tensor(input_ids, dtype=torch.int32, device='cuda')
-        hidden_state = self.weights["embedding"][input_tensor]
+        if isinstance(input_ids, list):
+            input_ids = torch.tensor(input_ids, dtype=torch.int32, device="cuda")
+        else:  # already a tensor
+            input_ids = input_ids.to(dtype=torch.int32, device="cuda")
 
-        for current_layer in range(self.layers):
-            # attention block
-            rms = torch.sqrt(torch.mean(hidden_state ** 2, dim=-1, keepdim=True) + 1e-5)
-            normalized_x = hidden_state / rms
-            x = normalized_x.to(torch.float16) * self.weights["layernormAttn_weight"][current_layer]
+        seq_len = input_ids.shape[0]
+        hidden_state = self.weights["embedding"][input_ids]
 
-            q = x.matmul(self.weights["self_attn_q_proj_weight"][current_layer].t())
-            k = x.matmul(self.weights["self_attn_k_proj_weight"][current_layer].t())
-            v = x.matmul(self.weights["self_attn_v_proj_weight"][current_layer].t())
+        # Transformer layers
+        for layer_idx in range(self.layers):
 
-            # apply rope with position offsets
-            seq_offset = offset
-            for i in range(len(input_ids)):
-                token_pos = seq_offset + i
-                if len(input_ids) > 1:
-                    apply_rope(q[i:i+1], output=q[i:i+1], head_dim=self.head_dim, offset=token_pos)
-                    apply_rope(k[i:i+1], output=k[i:i+1], head_dim=self.head_dim, offset=token_pos)
-                else:
-                    apply_rope(q, output=q, head_dim=self.head_dim, offset=token_pos)
-                    apply_rope(k, output=k, head_dim=self.head_dim, offset=token_pos)
+            # Layer-norm (RMS)
+            rms = torch.sqrt(hidden_state.pow(2).mean(dim=-1, keepdim=True) + 1e-5)
+            x_norm = (hidden_state / rms).to(torch.float16) * self.weights["layernormAttn_weight"][layer_idx]
 
-            sub_q = q.view(-1, self.num_qo_heads, self.head_dim)
-            sub_k = k.view(-1, self.num_kv_heads, self.head_dim)
-            sub_v = v.view(-1, self.num_kv_heads, self.head_dim)
+            # Projections
+            k = x_norm @ self.weights["self_attn_k_proj_weight"][layer_idx].T
+            v = x_norm @ self.weights["self_attn_v_proj_weight"][layer_idx].T
+            q = x_norm @ self.weights["self_attn_q_proj_weight"][layer_idx].T
 
-            # handle kv cache
-            if prefill or (current_layer not in self.kv_cache):
-                self.kv_cache[current_layer] = {"k": sub_k, "v": sub_v}
+            # rope (position-aware)
+            past_k = None
+            past_v = None
+            if layer_idx in self.kv_cache:
+                past_k = self.kv_cache[layer_idx]["k"]
+                past_v = self.kv_cache[layer_idx]["v"]
+
+            past_len = 0 if past_k is None else past_k.shape[0]
+            apply_rope(q, q, self.head_dim, offset=past_len)
+            apply_rope(k, k, self.head_dim, offset=past_len)
+
+            # Reshape / append to cache
+            k = k.view(seq_len, self.num_kv_heads, self.head_dim)
+            v = v.view(seq_len, self.num_kv_heads, self.head_dim)
+            
+           
+            if past_k is None:
+                k_total = k
+                v_total = v
             else:
-                self.kv_cache[current_layer]["k"] = torch.cat([self.kv_cache[current_layer]["k"], sub_k], dim=0)
-                self.kv_cache[current_layer]["v"] = torch.cat([self.kv_cache[current_layer]["v"], sub_v], dim=0)
+                k_total = torch.cat([past_k, k], dim=0)
+                v_total = torch.cat([past_v, v], dim=0)
 
-            cache_k = self.kv_cache[current_layer]["k"]
-            cache_v = self.kv_cache[current_layer]["v"]
+            # save fp16 copies to avoid autograd / keep memory low
+            self.kv_cache[layer_idx] = {
+                "k": k_total.detach().to(torch.float16),
+                "v": v_total.detach().to(torch.float16),
+            }
+
+            # Attention (use only last token's q, all keys/values)
+            group_size = self.num_qo_heads // self.num_kv_heads
+            q_h = q.view(seq_len, self.num_qo_heads, self.head_dim)
+            k_h = k_total.repeat_interleave(group_size, dim=1)
+            v_h = v_total.repeat_interleave(group_size, dim=1)
+
+            q_h = q_h.permute(1, 0, 2)
+            k_h = k_h.permute(1, 0, 2)
+            v_h = v_h.permute(1, 0, 2)
 
             scale = 1.0 / (self.head_dim ** 0.5)
-            group_size = self.num_qo_heads // self.num_kv_heads
-            
-            expanded_k = cache_k.repeat_interleave(group_size, dim=1)
-            expanded_v = cache_v.repeat_interleave(group_size, dim=1)
+            scores = (q_h @ k_h.transpose(-2, -1)) * scale
 
-            sub_q_t = sub_q.permute(1, 0, 2)
-            sub_k_t = expanded_k.permute(1, 0, 2)
-            sub_v_t = expanded_v.permute(1, 0, 2)
-
-            scores = torch.matmul(sub_q_t, sub_k_t.transpose(-2, -1)) * scale
-
-            n_q = sub_q.shape[0]
-            n_k = cache_k.shape[0]
-            
-            # create attention mask
-            if not prefill:
-                assert n_q == 1
-                causal_mask = torch.ones(n_q, n_k, dtype=torch.bool, device=scores.device)
+            # causal mask: new token(s) only attend to <= current position
+            if seq_len == 1:
+                pass
             else:
-                causal_mask = torch.tril(torch.ones(n_q, n_k, dtype=torch.bool, device=scores.device))
-            
-            scores = scores.masked_fill(~causal_mask.unsqueeze(0), float("-inf"))
-            attn_weights = torch.softmax(scores, dim=-1)
-            attn_output = torch.matmul(attn_weights, sub_v_t)
-            attn_output = attn_output.permute(1, 0, 2)
-            attn_output = attn_output.reshape(-1, self.num_qo_heads * self.head_dim)
+                causal = torch.tril(torch.ones(scores.shape[-2:], dtype=torch.bool, device=scores.device))
+                scores = scores.masked_fill(~causal.unsqueeze(0), float("-inf"))
 
-            attn_out = attn_output.matmul(self.weights["o_proj_weight"][current_layer].t())
-            hidden_state_after_attn = attn_out + hidden_state
+            attn = torch.softmax(scores, dim=-1)
+            context = attn @ v_h
+            context = context.permute(1, 0, 2).reshape(seq_len, -1)
 
-            # ffn block
-            rms = torch.sqrt(torch.mean(hidden_state_after_attn ** 2, dim=-1, keepdim=True) + 1e-5)
-            normalized_x = hidden_state_after_attn / rms
-            ffn_input = normalized_x.to(torch.float16) * self.weights["layernormFFN_weight"][current_layer]
+            hidden_state = (context @ self.weights["o_proj_weight"][layer_idx].T) + hidden_state
 
-            up_proj = ffn_input.matmul(self.weights["up_proj_weight"][current_layer].t())
-            gate_proj = ffn_input.matmul(self.weights["gate_proj_weight"][current_layer].t())
-            activated = up_proj * torch.nn.functional.silu(gate_proj)
-            
-            ffn_output = activated.matmul(self.weights["down_proj_weight"][current_layer].t())
-            hidden_state = ffn_output + hidden_state_after_attn
+            # Feed-forward network
+            rms = torch.sqrt(hidden_state.pow(2).mean(dim=-1, keepdim=True) + 1e-5)
+            x_norm = (hidden_state / rms).to(torch.float16) * self.weights["layernormFFN_weight"][layer_idx]
 
-        # final layer norm and output projection
-        rms = torch.sqrt(torch.mean(hidden_state ** 2, dim=-1, keepdim=True) + 1e-5)
-        normalized_x = hidden_state / rms
-        final_output = normalized_x.to(torch.float16) * self.weights["model_layernorm_weight"]
-        
-        logits = final_output.matmul(self.weights["lm_head_weight"].t())
-        
-        self.seq_len += len(input_ids)
-        
-        next_token = torch.argmax(logits[-1]).item()
+            up = x_norm @ self.weights["up_proj_weight"][layer_idx].T
+            gate = x_norm @ self.weights["gate_proj_weight"][layer_idx].T
+            ff = (up * torch.nn.functional.silu(gate)) @ self.weights["down_proj_weight"][layer_idx].T
+
+            hidden_state = ff + hidden_state
+
+        # Final projection -> logits -> greedy pick
+        rms = torch.sqrt(hidden_state.pow(2).mean(dim=-1, keepdim=True) + 1e-5)
+        norm = (hidden_state / rms).to(torch.float16) * self.weights["model_layernorm_weight"]
+        logits = norm @ self.weights["lm_head_weight"].T
+
+        next_token = logits.argmax(dim=-1)[-1].item()  # last position
         return next_token
-    
+
     def generate(self, input_string, rounds=20):
         """
         Generate text from an input string
@@ -152,27 +146,18 @@ class Engine:
         
         # Initialize output with input tokens
         output_ids = input_ids.copy()
-        time_tst = 0
-        # Initial prefill pass with the entire prompt
-        start = time.perf_counter()
-        new_token = self.run(output_ids, prefill=True)
-        stop = time.perf_counter()
-        time_tst += ( stop - start )
+
+        new_token = self.run(output_ids)
         output_ids.append(new_token)
         
         # Generate additional tokens
         for round in range(rounds - 1):
-            # print(f"Round {round}")
-            start = time.perf_counter()
-            # Generate next token with proper context
-            new_token = self.run([output_ids[-1]], prefill=False)
-            stop = time.perf_counter()
-            time_tst += ( stop - start )
+            new_token = self.run(output_ids[-1:], prefill=False)
             output_ids.append(new_token)
         
         # Decode the output tokens to text
         output_text = self.tokenizer.decode(output_ids, skip_special_tokens=True)
-        return output_text, time_tst
+        return output_text
 
 ########################################
 # Main Loop: Text Generation
