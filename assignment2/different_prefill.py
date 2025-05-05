@@ -13,16 +13,17 @@ class Engine:
 
     def __init__(self):
         self.weight_path = "/model/Meta-Llama-3-8B-Instruct"
-        self.head_dim = 128
-        self.num_qo_heads = 32
-        self.num_kv_heads = 8
-        self.layers = 32
+        self.head_dim = 128  # Dimensionality of each attention head
+        self.num_qo_heads = 32  # Total number of query/output heads
+        self.num_kv_heads = 8  # Total number of key/value heads
+        self.layers = 32  # Number of transformer layers
 
+        # Load the tokenizer for text processing
         self.tokenizer = AutoTokenizer.from_pretrained(
             "/model/Meta-Llama-3-8B-Instruct"
         )
-        self.tokenizer.pad_token = self.tokenizer.eos_token
 
+        # Initialize and load model weights using the helper module
         weight_manager = WeightManager()
         weight_manager.load_from_safe_tensor(self.weight_path)
         self.weights = extract_model_weights(weight_manager.weight_map, self.layers)
@@ -57,7 +58,9 @@ class Engine:
         for layer in range(self.layers):
             # normalize
             rms = torch.sqrt(hidden_state.pow(2).mean(-1, keepdim=True) + 1e-5)
-            x_norm = (hidden_state / rms).to(torch.float16) * self.weights["layernormAttn_weight"][layer]
+            x_norm = (hidden_state / rms).to(torch.float16) * self.weights[
+                "layernormAttn_weight"
+            ][layer]
             d_model = x_norm.shape[-1]
             x_flat = x_norm.view(-1, d_model)
 
@@ -152,15 +155,21 @@ class Engine:
 
             # -- FFN block --
             rms = torch.sqrt(hidden_state.pow(2).mean(-1, keepdim=True) + 1e-5)
-            x_norm = (hidden_state / rms).to(torch.float16) * self.weights["layernormFFN_weight"][layer]
+            x_norm = (hidden_state / rms).to(torch.float16) * self.weights[
+                "layernormFFN_weight"
+            ][layer]
             up = x_norm.view(-1, d_model) @ self.weights["up_proj_weight"][layer].T
             gate = x_norm.view(-1, d_model) @ self.weights["gate_proj_weight"][layer].T
-            ff = (up * torch.nn.functional.silu(gate)) @ self.weights["down_proj_weight"][layer].T
+            ff = (up * torch.nn.functional.silu(gate)) @ self.weights[
+                "down_proj_weight"
+            ][layer].T
             hidden_state = ff.view(B, S, -1) + hidden_state
 
         # final norm + vocab projection
         rms = torch.sqrt(hidden_state.pow(2).mean(-1, keepdim=True) + 1e-5)
-        norm = (hidden_state / rms).to(torch.float16) * self.weights["model_layernorm_weight"]
+        norm = (hidden_state / rms).to(torch.float16) * self.weights[
+            "model_layernorm_weight"
+        ]
         logits = norm @ self.weights["lm_head_weight"].T
 
         # select next token from last valid position

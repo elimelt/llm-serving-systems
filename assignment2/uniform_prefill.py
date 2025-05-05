@@ -68,7 +68,9 @@ class Engine:
         for layer in range(self.layers):
             # layer norm
             rms = torch.sqrt(hidden_state.pow(2).mean(-1, keepdim=True) + 1e-5)
-            x_norm = (hidden_state / rms).to(torch.float16) * self.weights["layernormAttn_weight"][layer]
+            x_norm = (hidden_state / rms).to(torch.float16) * self.weights[
+                "layernormAttn_weight"
+            ][layer]
 
             # projections
             d_model = x_norm.shape[-1]
@@ -145,20 +147,28 @@ class Engine:
 
             # merge heads and apply output projection
             context = context.permute(0, 2, 1, 3).contiguous().view(B, S, -1)
-            hidden_state = (context @ self.weights["o_proj_weight"][layer].T) + hidden_state
+            hidden_state = (
+                context @ self.weights["o_proj_weight"][layer].T
+            ) + hidden_state
 
             # feed-forward
             rms = torch.sqrt(hidden_state.pow(2).mean(-1, keepdim=True) + 1e-5)
-            x_norm = (hidden_state / rms).to(torch.float16) * self.weights["layernormFFN_weight"][layer]
+            x_norm = (hidden_state / rms).to(torch.float16) * self.weights[
+                "layernormFFN_weight"
+            ][layer]
 
             up = x_norm.view(-1, d_model) @ self.weights["up_proj_weight"][layer].T
             gate = x_norm.view(-1, d_model) @ self.weights["gate_proj_weight"][layer].T
-            ff = (up * torch.nn.functional.silu(gate)) @ self.weights["down_proj_weight"][layer].T
+            ff = (up * torch.nn.functional.silu(gate)) @ self.weights[
+                "down_proj_weight"
+            ][layer].T
             hidden_state = ff.view(B, S, -1) + hidden_state
 
         # final logits
         rms = torch.sqrt(hidden_state.pow(2).mean(-1, keepdim=True) + 1e-5)
-        norm = (hidden_state / rms).to(torch.float16) * self.weights["model_layernorm_weight"]
+        norm = (hidden_state / rms).to(torch.float16) * self.weights[
+            "model_layernorm_weight"
+        ]
         logits = norm @ self.weights["lm_head_weight"].T
 
         next_tokens = logits.argmax(dim=-1)[:, -1:]
