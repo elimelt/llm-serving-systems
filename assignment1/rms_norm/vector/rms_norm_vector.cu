@@ -2,7 +2,7 @@
 #include <cuda_runtime.h>
 #include <iostream>
 
-#define ELEMENT_PER_BLOCK 256
+#define ELEMENT_PER_BLOCK 10
 
 __global__ void rms_norm_vector_kernel(float *input, float *weight, float *output, int cols, float epsilon) {
     __shared__ float sdata[ELEMENT_PER_BLOCK];

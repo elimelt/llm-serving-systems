@@ -7,7 +7,7 @@ def create_tensor(rows, cols):
         for j in range(cols):
             x[i][j] = i * cols + j + 1
     return x
-x = create_tensor(1, 10)
+x = create_tensor(1, 20)
 print(x)
 # rms norm of x
 rms_norm = nn.RMSNorm(normalized_shape=x.shape[1], eps=1e-6)

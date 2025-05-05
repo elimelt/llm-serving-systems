@@ -3,7 +3,7 @@
 #include <iostream>
 
 #define SIZE (8192 * 8192)
-#define ITERS 10
+#define ITERS 100
 
 int main() {
     // Allocate and initialize host memory

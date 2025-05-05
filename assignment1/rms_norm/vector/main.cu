@@ -2,7 +2,7 @@
 #include "rms_norm_vector.h"
 #include <stdio.h>
 
-#define SIZE 1024 * 1024
+#define SIZE 20
 #define ITERS 10
 
 int main() {
@@ -45,6 +45,14 @@ int main() {
     cudaEventDestroy(stop);
 
     printf("Average time per iteration: %f ms\n", totalTime / ITERS);
+
+    // print the output:
+    float* h_output = new float[SIZE];
+    cudaMemcpy(h_output, d_output, matrixSize, cudaMemcpyDeviceToHost);
+    for (int i = 0; i < SIZE; i++) {
+        printf("%f ", h_output[i]);
+    }
+    printf("\n");
 
     cudaFree(d_input);
     cudaFree(d_weight);

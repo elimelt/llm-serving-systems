@@ -13,7 +13,7 @@ if __name__ == "__main__":
   end = torch.cuda.Event(enable_timing=True)
   start.record()
   for _ in range(100):
-      output_triton = silu_triton(x)
+      output_triton = silu_torch(x)
   end.record()
   torch.cuda.synchronize()
   
