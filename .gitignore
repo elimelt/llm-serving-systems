@@ -21,3 +21,4 @@ assignment*/Makefile
 **/CMakeFiles/*
 
 **/__pycache__/*
+**/flash-attention/*
