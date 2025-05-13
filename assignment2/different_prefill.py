@@ -180,6 +180,7 @@ class Engine:
         return next_tokens.to(torch.int32).to(input_ids.device)
 
     def generate_batched(self, input_string_list, rounds=20):
+        self.tokenizer.pad_token = self.tokenizer.eos_token
         encoded = self.tokenizer(
             input_string_list,
             return_tensors="pt",
@@ -211,8 +212,8 @@ class Engine:
 
 if __name__ == "__main__":
     batch_size = 2
-    input_string = "Hi, who are you?"
-    input_string_list = [input_string] * (batch_size // 2) + ["Hi, ?"] * (
+    input_string = "Today is a rainy day and I am going to?"
+    input_string_list = [input_string] * (batch_size // 2) + ["UCB is"] * (
         batch_size // 2
     )
     engine = Engine()

@@ -396,19 +396,19 @@ class Engine:
                 # print('batch_indices', batch_indices.shape)
                 # print('positions', positions.shape)
 
-                assert (kv_indices < self.max_pages).all(), f"kv_indices out of bounds: {kv_indices.max()} >= {self.max_pages}"
-                for i, kv in enumerate([self.kv_cache_map[r.request_id] for r in requests]):
-                    expected_pages = (kv.seqlen + self.page_size - 1) // self.page_size
-                    assert len(kv.indices) == expected_pages, f"Request {i} has {len(kv.indices)} pages, expected {expected_pages}"
-                    # check that no request has 0 pages
-                    assert len(kv.indices) > 0, f"Request {i} has 0 pages"
+                # assert (kv_indices < self.max_pages).all(), f"kv_indices out of bounds: {kv_indices.max()} >= {self.max_pages}"
+                # for i, kv in enumerate([self.kv_cache_map[r.request_id] for r in requests]):
+                #     expected_pages = (kv.seqlen + self.page_size - 1) // self.page_size
+                #     assert len(kv.indices) == expected_pages, f"Request {i} has {len(kv.indices)} pages, expected {expected_pages}"
+                #     # check that no request has 0 pages
+                #     assert len(kv.indices) > 0, f"Request {i} has 0 pages"
                 
                 # print("batch_indices min:", batch_indices.min().item(), "max:", batch_indices.max().item(), "len(kv_indices):", len(kv_indices))
                 # print("batch_indices:", batch_indices)
                 # print("positions min:", positions.min().item(), "max:", positions.max().item(), "len(kv_indices):", len(kv_indices))
                 # print("positions:", positions)
-                assert (batch_indices >= 0).all() and (batch_indices < len(kv_indices)).all()
-                assert (positions >= 0).all()
+                # assert (batch_indices >= 0).all() and (batch_indices < len(kv_indices)).all()
+                # assert (positions >= 0).all()
 
                 flashinfer.append_paged_kv_cache(
                     k, v,

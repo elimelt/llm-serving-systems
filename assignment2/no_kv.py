@@ -125,7 +125,7 @@ class Engine:
 # Main Loop: Text Generation
 ########################################
 if __name__ == "__main__":
-    input_string = "Hi, who are you?"
+    input_string = "UCB is"
     engine = Engine()
     output_text, t = engine.generate(input_string, rounds=20)
     print(f"Generated Text: {output_text}, time: {t}s")

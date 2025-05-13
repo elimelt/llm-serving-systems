@@ -8,7 +8,9 @@
 double calc_flops(int N, int M, int K, float time_ms)
 {
   float time_s = time_ms / 1000.0f;                                                                        // Convert milliseconds to seconds
-  return 2.0 * static_cast<double>(N) * static_cast<double>(M) * static_cast<double>(K) / (time_s * 1e12); // Convert to TFLOPS
+  // For matrix multiplication C = A×B where A is [M,N], B is [N,K], and C is [M,K]
+  // We perform 2*M*K*N operations (M*K output elements, each with N multiply-adds)
+  return 2.0 * static_cast<double>(M) * static_cast<double>(K) * static_cast<double>(N) / (time_s * 1e12); // Convert to TFLOPS
 }
 
 float bench(int M = 1024, int N = 1024, int K = 1024, int n_iters = 100)
@@ -56,18 +58,18 @@ float bench(int M = 1024, int N = 1024, int K = 1024, int n_iters = 100)
         handle,
         CUBLAS_OP_N,
         CUBLAS_OP_N,
-        M, K, N, // Changed order: M, K are output dims, N is inner dim
+        M, K, N, // For C[M,K] = A[M,N] * B[N,K], dims are (M, K, N)
         &alpha,
         d_A,
         CUDA_R_32F,
-        M, // lda = M for column-major
+        M, // lda = M for column-major (leading dimension of A)
         d_B,
         CUDA_R_32F,
-        N, // ldb = N for column-major
+        N, // ldb = N for column-major (leading dimension of B)
         &beta,
         d_C,
         CUDA_R_32F,
-        M, // ldc = M for column-major
+        M, // ldc = M for column-major (leading dimension of C)
         CUBLAS_COMPUTE_32F,
         CUBLAS_GEMM_DEFAULT);
   }
@@ -100,18 +102,18 @@ float bench(int M = 1024, int N = 1024, int K = 1024, int n_iters = 100)
         handle,
         CUBLAS_OP_N,
         CUBLAS_OP_N,
-        M, K, N, // Changed order: M, K are output dims, N is inner dim
+        M, K, N, // For C[M,K] = A[M,N] * B[N,K], dims are (M, K, N)
         &alpha,
         d_A,
-        CUDA_R_32F,
-        M, // lda = M for column-major
+        CUDA_R_16F,
+        M, // lda = M for column-major (leading dimension of A)
         d_B,
-        CUDA_R_32F,
-        N, // ldb = N for column-major
+        CUDA_R_16F,
+        N, // ldb = N for column-major (leading dimension of B)
         &beta,
         d_C,
         CUDA_R_32F,
-        M, // ldc = M for column-major
+        M, // ldc = M for column-major (leading dimension of C)
         CUBLAS_COMPUTE_32F,
         CUBLAS_GEMM_DEFAULT);
 
@@ -162,7 +164,7 @@ int main()
 
   for (auto M : Ms)
     for (auto NK : NKs)
-      matrix_sizes.push_back(std::make_tuple(NK.first, M, NK.second));
+      matrix_sizes.push_back(std::make_tuple(M, NK.first, NK.second));  // Store as (M, N, K)
 
   // M: 128 256 384 512 640 768 896 1024 1152 1280 1408 1536 1664 1792 1920 2048
   // N, K: (512, 512)(4096, 4096)(14336, 4096)(4096, 1024)(1024, 4096)
@@ -171,11 +173,11 @@ int main()
   auto tflops = std::vector<double>();
   for (auto &size : matrix_sizes)
   {
-    int N = std::get<0>(size);
-    int M = std::get<1>(size);
+    int M = std::get<0>(size);
+    int N = std::get<1>(size);
     int K = std::get<2>(size);
-    res.push_back(bench(N, M, K, 10000));
-    double flops = calc_flops(N, M, K, res.back());
+    res.push_back(bench(M, N, K, 1000));  // Pass as M, N, K to match our desired dimensions
+    double flops = calc_flops(M, N, K, res.back());  // Pass M, N, K in correct order
     tflops.push_back(flops);
   }
 
@@ -183,14 +185,14 @@ int main()
   std::ofstream file("cublas_perf.csv");
   if (file.is_open())
   {
-    file << "N,M,K,average_time,tflops\n";
+    file << "M,N,K,library,tflops\n";  // Updated column names for clarity
     auto size_it = matrix_sizes.begin();
     for (size_t i = 0; i < res.size(); ++i, ++size_it)
     {
       file << std::get<0>(*size_it) << ","
            << std::get<1>(*size_it) << ","
            << std::get<2>(*size_it) << ","
-           << res[i] << ","
+           << "cublas" << ","
            << tflops[i] << "\n";
     }
     file.close();

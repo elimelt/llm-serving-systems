@@ -165,5 +165,5 @@ class Engine:
 if __name__ == "__main__":
     input_string = "Hi, who are you?"
     engine = Engine()
-    output_text, t = engine.generate(input_string, rounds=20)
-    print(f"Generated Text: {output_text}, time: {t}s")
+    output_text = engine.generate(input_string, rounds=20)
+    print(f"Generated Text: {output_text}")
