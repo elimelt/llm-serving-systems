@@ -61,10 +61,10 @@ float bench(int M = 1024, int N = 1024, int K = 1024, int n_iters = 100)
         M, K, N, // For C[M,K] = A[M,N] * B[N,K], dims are (M, K, N)
         &alpha,
         d_A,
-        CUDA_R_32F,
+        CUDA_R_16F,
         M, // lda = M for column-major (leading dimension of A)
         d_B,
-        CUDA_R_32F,
+        CUDA_R_16F,
         N, // ldb = N for column-major (leading dimension of B)
         &beta,
         d_C,
@@ -112,7 +112,7 @@ float bench(int M = 1024, int N = 1024, int K = 1024, int n_iters = 100)
         N, // ldb = N for column-major (leading dimension of B)
         &beta,
         d_C,
-        CUDA_R_32F,
+        CUDA_R_16F,
         M, // ldc = M for column-major (leading dimension of C)
         CUBLAS_COMPUTE_32F,
         CUBLAS_GEMM_DEFAULT);
@@ -178,6 +178,7 @@ int main()
     int K = std::get<2>(size);
     res.push_back(bench(M, N, K, 1000));  // Pass as M, N, K to match our desired dimensions
     double flops = calc_flops(M, N, K, res.back());  // Pass M, N, K in correct order
+    printf("M: %d, N: %d, K: %d, time: %f\n", M, N, K, res.back());
     tflops.push_back(flops);
   }
 

@@ -18,7 +18,7 @@ torch.cuda.set_device(0)
 
 
 
-weight_path = "/data/Meta-Llama-3-8B-Instruct"
+weight_path = "/model/Meta-Llama-3-8B-Instruct"
 
 layers = 32
 num_qo_heads = 32      # Total number of query/output heads

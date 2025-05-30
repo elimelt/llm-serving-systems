@@ -1,5 +1,4 @@
 import math
-import time
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
@@ -30,11 +29,14 @@ def benchmark_flashattn3_decode(model_cfg, batch_size, context_len, page_size=64
     for _ in range(WARMUP):
         flash_attn_with_kvcache(q, k, v, causal=True)
     torch.cuda.synchronize()
-    start = time.time()
+    start_event = torch.cuda.Event(enable_timing=True)
+    end_event = torch.cuda.Event(enable_timing=True)
+    start_event.record()
     for _ in range(n_repeats):
         flash_attn_with_kvcache(q, k, v, causal=True)
-    torch.cuda.synchronize()
-    elapsed = (time.time() - start) / n_repeats
+    end_event.record()
+    end_event.synchronize()
+    elapsed = start_event.elapsed_time(end_event) / 1000.0 / n_repeats
     return elapsed
 
 
@@ -79,12 +81,15 @@ def benchmark_flashinfer_decode(model_cfg, batch_size, context_len, page_size=64
         decode_wrapper.run(q, kv_cache)
     torch.cuda.synchronize()
 
-    start = time.time()
+    start_event = torch.cuda.Event(enable_timing=True)
+    end_event = torch.cuda.Event(enable_timing=True)
+    start_event.record()
     for _ in range(n_repeats):
         q = torch.randn(batch_size, H_qo, d, dtype=dtype, device=device)
         decode_wrapper.run(q, kv_cache)
-    torch.cuda.synchronize()
-    elapsed = (time.time() - start) / n_repeats
+    end_event.record()
+    end_event.synchronize()
+    elapsed = start_event.elapsed_time(end_event) / 1000.0 / n_repeats
     return elapsed
 
 
@@ -166,7 +171,7 @@ def plot_decode_results(results):
         fi = results[model]['context_sweep']['FlashInfer']
         ax.plot(np.log2(c), fa, label='FlashAttention-3', marker='o')
         ax.plot(np.log2(c), fi, label='FlashInfer', marker='x')
-        ax.set_xlabel('log2(context length)')
+        ax.set_xlabel('context length')
         ax.set_title(model)
         ax.set_xticks(np.log2(c))
         ax.set_xticklabels([str(x) for x in c])
@@ -182,7 +187,7 @@ def plot_decode_results(results):
         fi = results[model]['batch_sweep']['FlashInfer']
         ax.plot(np.log2(b), fa, label='FlashAttention-3', marker='o')
         ax.plot(np.log2(b), fi, label='FlashInfer', marker='x')
-        ax.set_xlabel('log2(batch size)')
+        ax.set_xlabel('batch size')
         ax.set_title(model)
         ax.set_xticks(np.log2(b))
         ax.set_xticklabels([str(x) for x in b])
@@ -198,7 +203,7 @@ def plot_decode_results(results):
         fi = results[model]['page_sweep']['FlashInfer']
         ax.plot(np.log2(psize), fa, label='FlashAttention-3', marker='o')
         ax.plot(np.log2(psize), fi, label='FlashInfer', marker='x')
-        ax.set_xlabel('log2(Page size)')
+        ax.set_xlabel('Page size')
         ax.set_title(model)
         ax.set_xticks(np.log2(psize))
         ax.set_xticklabels([str(x) for x in psize])

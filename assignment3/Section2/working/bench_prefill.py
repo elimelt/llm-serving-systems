@@ -1,5 +1,3 @@
-import math
-import time
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
@@ -31,11 +29,14 @@ def benchmark_flashattn3_qkvpacked(model_cfg, batch_size, seq_len, n_repeats=ITE
     for _ in range(WARMUP):
         flash_attn_qkvpacked_func(qkv, 0.0, causal=True)
     torch.cuda.synchronize()
-    start = time.time()
+    start_event = torch.cuda.Event(enable_timing=True)
+    end_event = torch.cuda.Event(enable_timing=True)
+    start_event.record()
     for _ in range(n_repeats):
         flash_attn_qkvpacked_func(qkv, 0.0, causal=True)
-    torch.cuda.synchronize()
-    elapsed = (time.time() - start) / n_repeats
+    end_event.record()
+    end_event.synchronize()
+    elapsed = start_event.elapsed_time(end_event) / 1000.0 / n_repeats
     return elapsed
 
 
@@ -50,11 +51,14 @@ def benchmark_flashattn3_unpacked(model_cfg, batch_size, seq_len, n_repeats=ITER
     for _ in range(WARMUP):
         flash_attn_func(q, k, v, causal=True)
     torch.cuda.synchronize()
-    start = time.time()
+    start_event = torch.cuda.Event(enable_timing=True)
+    end_event = torch.cuda.Event(enable_timing=True)
+    start_event.record()
     for _ in range(n_repeats):
         flash_attn_func(q, k, v, causal=True)
-    torch.cuda.synchronize()
-    elapsed = (time.time() - start) / n_repeats
+    end_event.record()
+    end_event.synchronize()
+    elapsed = start_event.elapsed_time(end_event) / 1000.0 / n_repeats
     return elapsed
 
 
@@ -98,11 +102,14 @@ def benchmark_flashinfer(model_cfg, batch_size, seq_len, n_repeats=ITERS):
     torch.cuda.synchronize()
 
     # Benchmark
-    start = time.time()
+    start_event = torch.cuda.Event(enable_timing=True)
+    end_event = torch.cuda.Event(enable_timing=True)
+    start_event.record()
     for _ in range(n_repeats):
         prefill_wrapper.run(q, k, v)
-    torch.cuda.synchronize()
-    elapsed = (time.time() - start) / n_repeats
+    end_event.record()
+    end_event.synchronize()
+    elapsed = start_event.elapsed_time(end_event) / 1000.0 / n_repeats
     return elapsed
 
 
@@ -173,7 +180,7 @@ def plot_results(results):
         fi = results[model]['p_sweep']['FlashInfer']
         ax.plot(np.log2(p), fa, label='FlashAttention-3', marker='o')
         ax.plot(np.log2(p), fi, label='FlashInfer', marker='x')
-        ax.set_xlabel('log2(p) (sequence length)')
+        ax.set_xlabel('p (sequence length)')
         ax.set_title(model)
         ax.set_xticks(np.log2(p))
         ax.set_xticklabels([str(x) for x in p])
@@ -189,7 +196,7 @@ def plot_results(results):
         fi = results[model]['batch_sweep']['FlashInfer']
         ax.plot(np.log2(b), fa, label='FlashAttention-3', marker='o')
         ax.plot(np.log2(b), fi, label='FlashInfer', marker='x')
-        ax.set_xlabel('log2(batch size)')
+        ax.set_xlabel('batch size')
         ax.set_title(model)
         ax.set_xticks(np.log2(b))
         ax.set_xticklabels([str(x) for x in b])

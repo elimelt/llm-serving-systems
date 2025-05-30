@@ -60,6 +60,7 @@ class DistKVPool:
 
     def alloc_page(self) -> int:
         """Pop a page index off the free list (O(1))."""
+        assert len( self._free_pages ) > 0, "no more free pages available"
         return self._free_pages.pop()
 
     def free_page(self, idx: int) -> None:
@@ -134,10 +135,6 @@ def build_kv_metadata(kvs: List[DistKVCache]):
     kv_last_page_len: List[int] = []
 
     for kv in kvs:
-        # pass
-        #########
-        # FIXME #
-        #########
         kv_indices.extend(kv.indices)
         kv_indptr.append(kv_indptr[-1] + len(kv.indices))
         kv_last_page_len.append(kv.last_page_offset)
@@ -271,9 +268,6 @@ class Engine:
             # 3) Reserve allocate pages for all requests if needed using allocate_tokens function
             # ----------------------------------------------------------------
             
-            #########
-            # FIXME #
-            #########
             for idx, r in enumerate(requests):
                 if idx >= num_decode_req:
                     # Allocate twice the size of the prompt to avoid reallocation
@@ -288,22 +282,11 @@ class Engine:
             kv_indptr, kv_indices, kv_last_page_len = build_kv_metadata(
                 [self.kv_cache_map[r.request_id] for r in requests]
             )
-            # print('qo_indptr', indptr_tensor.shape)
-            # print('qo_indptr[-1]', indptr_tensor[-1])
-            # print('kv_indptr', kv_indptr.shape)
-            # print('kv_indptr[-1]', kv_indptr[-1])
-            # print('kv_indices', kv_indices.shape)
-            # print('kv_last_page_len', kv_last_page_len.shape)
-
             # ----------------------------------------------------------------
             # 4) Plan FlashInfer execution for batch
             # ----------------------------------------------------------------
             if not len(requests) - num_decode_req == 0:
                 # plan prefill wrapper
-                # pass
-                #########
-                # FIXME #
-                #########
                 self.prefill_wrapper.plan(
                     indptr_tensor,
                     kv_indptr,
@@ -314,14 +297,9 @@ class Engine:
                     self.head_dim,
                     self.page_size,
                     causal=True,
-                    # TODO: make sure no other parameters are needed
                 )
             if num_decode_req > 0:
                 # plan decode wrapper
-                # pass
-                #########
-                # FIXME #
-                #########
                 self.decode_wrapper.plan(
                     kv_indptr,
                     kv_indices,
@@ -330,23 +308,16 @@ class Engine:
                     self.num_kv_heads,
                     self.head_dim,
                     self.page_size,
-                    # TODO: make sure no other parameters are needed
                 )
             # ----------------------------------------------------------------
             # 5) Forward pass through all *transformer* layers
             # ----------------------------------------------------------------
             hidden = self.weights["embedding"][input_tensor]
 
-            for layer in range(self.layers):
-                # print(f' ----- Layer {layer} ----- ')
+            for layer in range(self.layers): # TODO: slice into prefill and decode !!!!!
                 # === Self-attention sub-layer ==================================
                 rms = torch.sqrt(hidden.square().mean(-1, keepdim=True) + 1e-5)
                 ln_attn_in = (hidden / rms).to(torch.float16) * self.weights["layernormAttn_weight"][layer]
-
-                # print('ln_attn_in', ln_attn_in.shape)
-                # print('self_attn_q_proj_weight', self.weights["self_attn_q_proj_weight"][layer].shape)
-                # print('self_attn_k_proj_weight', self.weights["self_attn_k_proj_weight"][layer].shape)
-                # print('self_attn_v_proj_weight', self.weights["self_attn_v_proj_weight"][layer].shape)
 
                 k = (
                     ln_attn_in
@@ -364,51 +335,20 @@ class Engine:
                     .view(-1, self.num_qo_heads, self.head_dim)
                 )
 
-                # print('q', q.shape)
-                # print('k', k.shape)
-                # print('v', v.shape)
-
                 # ---- Rotary positional embedding ---------------------------
                 # Use flashinfer.apply_rope_inplace
                 # apply ROPE, Note the the theta is set to 500_000.0 and offsets should be the current sequence length before allocate new tokens
                 
-                #########
-                # FIXME #
-                #########
                 flashinfer.rope.apply_rope_inplace(q, k, indptr_tensor, seq_lens_before_t, rope_theta=500_000.0)
 
                 # ---- Append new tokens to *paged* KV-cache ------------------
                 # Use flashinfer.get_batch_indices_positions and flashinfer.append_paged_kv_cache
                 # if you use get_batch_indices_positions, seq_lens should be the length after the allocation
-                #########
-                # FIXME #
-                #########
-                # print('kv_indptr (batch_size + 1)', kv_indptr.shape)
-                # print('kv_indptr', kv_indptr)
-                # print('seq_lens_after_t (batch_size)', seq_lens_after_t.shape)
-                # print('seq_lens_after_t', seq_lens_after_t)
-                # print('paged_kv_cache', self.pool.get_paged_kv_cache(layer)[0].shape, self.pool.get_paged_kv_cache(layer)[1].shape)
                 batch_indices, positions = flashinfer.get_batch_indices_positions(
-                    indptr_tensor, # TODO: what is append_indptr
+                    indptr_tensor,
                     seq_lens_after_t,
                     k.shape[0]
                 )
-                # print('batch_indices', batch_indices.shape)
-                # print('positions', positions.shape)
-
-                # assert (kv_indices < self.max_pages).all(), f"kv_indices out of bounds: {kv_indices.max()} >= {self.max_pages}"
-                # for i, kv in enumerate([self.kv_cache_map[r.request_id] for r in requests]):
-                #     expected_pages = (kv.seqlen + self.page_size - 1) // self.page_size
-                #     assert len(kv.indices) == expected_pages, f"Request {i} has {len(kv.indices)} pages, expected {expected_pages}"
-                #     # check that no request has 0 pages
-                #     assert len(kv.indices) > 0, f"Request {i} has 0 pages"
-                
-                # print("batch_indices min:", batch_indices.min().item(), "max:", batch_indices.max().item(), "len(kv_indices):", len(kv_indices))
-                # print("batch_indices:", batch_indices)
-                # print("positions min:", positions.min().item(), "max:", positions.max().item(), "len(kv_indices):", len(kv_indices))
-                # print("positions:", positions)
-                # assert (batch_indices >= 0).all() and (batch_indices < len(kv_indices)).all()
-                # assert (positions >= 0).all()
 
                 flashinfer.append_paged_kv_cache(
                     k, v,
@@ -424,11 +364,9 @@ class Engine:
                 # ---- Attention itself --------------------------------------
                 # run prefill and decode wrappers. Note that for the prefill wrapper, if qo_indptr does not start with 0, first qo_indptr[0] rows of the output tensor will be empty
                 attn_out = None
-                #########
-                # FIXME #
-                #########
                 attn_out_prefill = None
                 attn_out_decode = None
+                # TODO: slice into prefill and decode
                 if not len(requests) - num_decode_req == 0:
                     attn_out_prefill = self.prefill_wrapper.run(q, self.pool.get_paged_kv_cache(layer))
 
@@ -436,9 +374,6 @@ class Engine:
                     attn_out_decode = self.decode_wrapper.run(q, self.pool.get_paged_kv_cache(layer))
                 
                 # aggregate the decode and prefill outputs
-                #########
-                # FIXME #
-                #########
                 if attn_out_prefill is not None and attn_out_decode is not None:
                     attn_out = torch.cat((attn_out_decode, attn_out_prefill), dim=0)
                 elif attn_out_prefill is not None:
@@ -530,12 +465,12 @@ class Engine:
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
     # Example batch: ten identically phrased prompts + ten location prompts
-    num_prompts = 100
+    num_prompts = 1
     sample_prompts = (
         # Hi, who are you? I'm a 25-year-old software engineer from the United States. I'm a bit of a
-        ["Hi, who are you?"] * num_prompts
+        ["Today is a rainy day"] * num_prompts
         # The University of Washington is located in Seattle, Washington, and is one of the largest and most prestigious public research universities in the United States
-        + ["The University of Washington is located in"] * num_prompts
+        # + ["The University of Washington is located in"] * num_prompts
     )
 
     engine = Engine()

@@ -107,7 +107,6 @@ class DistKVCache:
 
         remaining = max(0, num_tokens - room_in_last)
         pages_needed = (remaining + self.page_size - 1) // self.page_size
-
         for _ in range(pages_needed):
             self._indices.append(self._pool.alloc_page())
 
@@ -115,7 +114,9 @@ class DistKVCache:
 
     def release(self) -> None:
         """Return all pages back to the global pool (when request finishes)."""
+        num_freed = 0
         for idx in self._indices:
+            num_freed += 1
             self._pool.free_page(idx)
         self._indices.clear()
         self._seqlen = 0
@@ -198,7 +199,7 @@ class Engine:
 
         # ---- global paged KV-cache ---------------------------------------
         self.page_size = 16
-        self.max_pages = 20_000  # total pages in the pool (across *all* layers)
+        self.max_pages = 30_000  # total pages in the pool (across *all* layers)
         self.pool = DistKVPool(
             num_layers=self.layers,
             num_kv_heads=self.num_kv_heads,
@@ -247,13 +248,10 @@ class Engine:
                     pieces.append(req.output_token_ids[-1:])
                     indptr.append(indptr[-1] + 1)
                 else:                     # prefill
-                    pass
-                    #########
-                    # FIXME #
-                    #########
+                    pieces.append(req.scheduling_pf_tokens)
+                    indptr.append(indptr[-1] + req.scheduling_length)
 
             input_tensor = torch.cat(pieces).to("cuda")
-            # print(f"batch size {len(input_tensor)}")
             indptr_tensor = torch.tensor(indptr, dtype=torch.int32, device="cuda")
 
             # ----------------------------------------------------------------
@@ -267,13 +265,23 @@ class Engine:
             seq_lens_before_t = torch.tensor(seq_lens_before, dtype=torch.int32, device="cuda")
 
             # ----------------------------------------------------------------
+            # 2.5) Release pages for finished requests
+            # ----------------------------------------------------------------
+            request_ids = {req.request_id for req in requests}
+            items = list(self.kv_cache_map.items())
+            for req_id, cache in items:
+                if req_id not in request_ids:
+                    cache.release()
+                    del self.kv_cache_map[req_id]
+
+            # ----------------------------------------------------------------
             # 3) Reserve pages for the *new* tokens just queued
             # ----------------------------------------------------------------
             for idx, req in enumerate(requests):
                 cache = self.kv_cache_map[req.request_id]
-                #########
-                # FIXME #
-                #########
+
+                tokens_to_add = 1 if idx < num_decode_req else req.scheduling_length
+                cache.allocate_tokens(tokens_to_add)
 
             seq_lens_after = [self.kv_cache_map[r.request_id].seqlen for r in requests]
             seq_lens_after_t = torch.tensor(seq_lens_after, dtype=torch.int32, device="cuda")
@@ -286,9 +294,35 @@ class Engine:
             # ----------------------------------------------------------------
             # 4) Plan FlashInfer execution for this micro-batch
             # ----------------------------------------------------------------
-            #########
-            # FIXME #
-            #########
+            if not len(requests) - num_decode_req == 0: # if there are prefill requests
+                # Prefill slices
+                prefill_indptr = indptr_tensor[num_decode_req:] - indptr_tensor[num_decode_req]
+                prefill_kv_indptr = kv_indptr[num_decode_req:]
+                prefill_kv_last_page_len = kv_last_page_len[num_decode_req:]
+                self.prefill_wrapper.plan(
+                    prefill_indptr,
+                    prefill_kv_indptr,
+                    kv_indices,
+                    prefill_kv_last_page_len,
+                    self.num_qo_heads,
+                    self.num_kv_heads,
+                    self.head_dim,
+                    self.page_size,
+                    causal=True,
+                )
+            if num_decode_req > 0: # if there are decode requests
+                # Decode slices
+                decode_kv_indptr = kv_indptr[:num_decode_req + 1]
+                decode_kv_last_page_len = kv_last_page_len[:num_decode_req]
+                self.decode_wrapper.plan(
+                    decode_kv_indptr,
+                    kv_indices,
+                    decode_kv_last_page_len,
+                    self.num_qo_heads,
+                    self.num_kv_heads,
+                    self.head_dim,
+                    self.page_size,
+                )
 
             # ----------------------------------------------------------------
             # 5) Forward pass through all *transformer* layers
@@ -349,10 +383,31 @@ class Engine:
 
                 # ---- Attention itself --------------------------------------
                 attn_out = None
-                #########
-                # FIXME #
-                #########
-                
+                attn_out_prefill = None
+                attn_out_decode = None
+                if not len(requests) - num_decode_req == 0: # if there are prefill requests
+                    attn_out_prefill = self.prefill_wrapper.run(q[num_decode_req:], (
+                        self.pool.k_datas[layer],  # (L, N, Hkv, P, D) -> k
+                        self.pool.v_datas[layer],  # (L, N, Hkv, P, D) -> v
+                    ))
+
+                if num_decode_req > 0: # if there are decode requests
+                    attn_out_decode = self.decode_wrapper.run(q[:num_decode_req], (
+                        self.pool.k_datas[layer],  # (L, N, Hkv, P, D) -> k
+                        self.pool.v_datas[layer],  # (L, N, Hkv, P, D) -> v
+                    ))
+
+                # aggregate the decode and prefill outputs
+                if attn_out_prefill is not None and attn_out_decode is not None:
+                    # TODO: put the decode output into the first qo_indptr[0] rows??
+                    attn_out = torch.cat((attn_out_decode, attn_out_prefill), dim=0)
+                elif attn_out_prefill is not None:
+                    attn_out = attn_out_prefill
+                elif attn_out_decode is not None:
+                    attn_out = attn_out_decode
+
+                attn_out = attn_out.reshape(attn_out.shape[0], -1) # TODO: view?
+
                 # Residual connection
                 hidden = attn_out.matmul(self.weights["o_proj_weight"][layer].T) + hidden
 
